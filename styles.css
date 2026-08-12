@@ -146,6 +146,13 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
 }
 .button-ghost:hover { color: var(--ink); background: var(--orange); border-color: var(--orange); }
 
+.button-outline {
+  color: var(--ink);
+  border-color: rgba(26, 16, 8, 0.28);
+  background: transparent;
+}
+.button-outline:hover { color: var(--ink); background: var(--orange); border-color: var(--orange); }
+
 .link-underline {
   font-size: 16px;
   font-weight: 600;
@@ -195,12 +202,38 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   z-index: 40;
   width: 68px;
   height: 68px;
-  pointer-events: none;
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 420ms var(--ease), transform 420ms var(--ease);
 }
 .companion.is-awake { opacity: 1; transform: none; }
+
+/* Al llegar al pedido el aro ya está completo y el acompañante se abre como
+   atajo al formulario. */
+.companion-label {
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 10px);
+  padding: 11px 17px;
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink);
+  background: var(--orange);
+  border-radius: 3px;
+  opacity: 0;
+  transform: translateY(-50%) translateX(14px);
+  transition: opacity 300ms var(--ease), transform 420ms var(--ease);
+}
+.companion.is-arrived .companion-label { opacity: 1; transform: translateY(-50%); }
+.companion.is-arrived .companion-chip { animation: arrive 620ms var(--ease); }
+.companion:hover .companion-label { background: #ffa246; }
+
+@keyframes arrive {
+  0% { transform: scale(1); }
+  38% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
 
 /* Aro de progreso. Es lo único que no se anima con transform ni opacity: es un
    trazo sobre un elemento de 68px, así que no cuesta nada. */
@@ -733,34 +766,55 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
 }
 .size {
   display: flex;
-  align-items: stretch;
-  gap: clamp(20px, 2.4vw, 34px);
+  flex-direction: column;
   padding: clamp(26px, 3vw, 40px);
   background: var(--paper);
   border: 1px solid var(--line-light);
   border-radius: 3px;
 }
-.size-featured { background: var(--ink); color: var(--cream); border-color: var(--ink); }
-.size-featured .size-meta,
-.size-featured .size-body p { color: var(--cream-70); }
-.size-featured .size-tag { color: var(--orange); }
-.size-featured .price { color: var(--cream); }
 
-/* Los dos discos comparten tratamiento y sólo cambia el diámetro: la
-   diferencia entre 20 y 24 cm se lee de un vistazo. */
-.size-visual { display: grid; place-items: center; width: 92px; height: 92px; flex: none; }
-.disc { display: block; border: 1.5px solid var(--cinnamon); border-radius: 50%; }
-.disc-20 { width: 64px; height: 64px; border-color: var(--orange); box-shadow: inset 0 0 0 6px rgba(242, 140, 40, 0.2); }
-.disc-24 { width: 82px; height: 82px; box-shadow: inset 0 0 0 8px rgba(139, 90, 43, 0.14); }
+/* Comparación de tamaños. Los dos discos van a escala real entre sí y apoyados
+   sobre la misma línea: la diferencia entre 20 y 24 cm se lee de un vistazo. */
+.size-disc {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 132px;
+  margin-bottom: 26px;
+  border-bottom: 1px solid var(--line-light);
+}
+.size-disc span {
+  display: block;
+  width: var(--d);
+  height: var(--d);
+  border: 1.5px solid var(--cinnamon);
+  border-radius: 50%;
+  background: rgba(242, 140, 40, 0.1);
+  transform: translateY(1px);
+}
+.size:first-child .size-disc span { border-color: var(--ember); }
 
-.size-body { display: flex; flex-direction: column; flex: 1; }
-.size-tag { margin-bottom: 6px; font-size: 15px; font-weight: 600; color: var(--ember); }
-.size h3 { margin-bottom: 8px; font-size: clamp(28px, 2.6vw, 36px); }
-.size-meta { margin-bottom: 12px; font-size: 16px; font-weight: 500; color: var(--ink-70); }
-.size-body > p { font-size: 16px; line-height: 1.6; color: var(--ink-70); }
+.size h3 { margin-bottom: 4px; font-size: clamp(28px, 2.6vw, 34px); }
+.size-dim { margin-bottom: 14px; font-size: 16px; color: rgba(26, 16, 8, 0.6); }
+.size-count {
+  margin-bottom: 16px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.size-count strong {
+  font-family: var(--serif);
+  font-size: clamp(38px, 3.6vw, 50px);
+  font-weight: 500;
+  line-height: 1;
+  margin-right: 8px;
+  color: var(--ember);
+}
+.size-desc { margin-bottom: 22px; font-size: 16px; line-height: 1.6; color: var(--ink-70); }
+
 .price {
   margin-top: auto;
-  padding-top: 22px;
+  padding-top: 4px;
   font-family: var(--serif);
   font-size: clamp(28px, 2.8vw, 38px);
   line-height: 1;
@@ -871,6 +925,11 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   color: var(--cream);
   background: var(--ink);
 }
+/* Aire al pie: al final de la página el acompañante se apoya acá y no sobre la
+   última línea del footer. */
+@media (min-width: 901px) {
+  .site-footer { padding-bottom: 124px; }
+}
 .footer-top {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 1fr);
@@ -944,6 +1003,13 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
     border-top: 1px solid rgba(255, 244, 230, 0.14);
   }
   .companion-ring { display: none; }
+  .companion-label {
+    position: static;
+    display: none;
+    transform: none;
+    padding: 9px 15px;
+  }
+  .companion.is-arrived .companion-label { display: block; transform: none; }
   .companion-rail {
     display: block;
     position: relative;
@@ -988,8 +1054,7 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   .journey-plates { margin-bottom: clamp(96px, 18vh, 150px); }
   .origin-steps { grid-template-columns: minmax(0, 1fr); gap: 22px; }
   .origin-quote { max-width: none; }
-  .size { flex-direction: column; gap: 18px; }
-  .size-visual { width: auto; justify-items: start; }
+  .size-disc { height: 112px; }
   .footer-top { grid-template-columns: minmax(0, 1fr); }
 }
 
@@ -1010,26 +1075,37 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
 
   .hero-actions { align-items: stretch; flex-direction: column; }
   .hero-actions .button { width: 100%; }
-  .link-underline { align-self: flex-start; }
+  .button-outline {
+  color: var(--ink);
+  border-color: rgba(26, 16, 8, 0.28);
+  background: transparent;
+}
+.button-outline:hover { color: var(--ink); background: var(--orange); border-color: var(--orange); }
+
+.link-underline { align-self: flex-start; }
 }
 
 /* --- Movimiento reducido --------------------------------------------------- */
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+  /* Se corta el movimiento, no los fundidos: la opacidad no molesta a nadie y
+     evita que la página quede completamente inerte. */
   *,
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-property: opacity !important;
+    transition-duration: 340ms !important;
   }
-  [data-reveal] { opacity: 1; transform: none; }
+  [data-reveal] { transform: none; }
   .origin-quote.is-scrubbing span { opacity: 1; }
 
-  /* El acompañante ya está fijo: sólo se apaga el aro de progreso. */
+  /* El acompañante ya está fijo: sólo se apagan el aro y el rebote. */
   .companion-ring { display: none; }
   .companion-chip { transform: none; }
+  .companion.is-arrived .companion-chip { animation: none; }
 
   /* El recorrido pasa a ser una composición estática con los tres momentos */
   .journey { height: auto; }

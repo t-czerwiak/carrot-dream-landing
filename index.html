@@ -20,19 +20,26 @@
     />
     <link rel="preload" as="image" href="assets/img/cake-hero.jpg" />
     <link rel="stylesheet" href="styles.css?v=2" />
+    <noscript>
+      <style>
+        /* Sin JS no hay quien dispare el revelado: se muestra todo. */
+        [data-reveal] { opacity: 1 !important; transform: none !important; }
+        .companion { display: none; }
+      </style>
+    </noscript>
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    <!-- Acompañante: baja con el scroll y va cambiando de estado según la
-         sección. Decorativo, por eso queda fuera del árbol de accesibilidad. -->
-    <div class="companion" data-companion aria-hidden="true">
-      <svg class="companion-ring" viewBox="0 0 100 100">
+    <!-- Acompañante: cambia de estado según la sección y su aro se completa
+         justo al llegar al pedido, donde se abre como atajo al formulario. -->
+    <a class="companion" data-companion href="#pedido" aria-label="Ir a hacer un pedido">
+      <svg class="companion-ring" viewBox="0 0 100 100" aria-hidden="true">
         <circle class="ring-bg" cx="50" cy="50" r="46" />
         <circle class="ring-fg" cx="50" cy="50" r="46" />
       </svg>
-      <div class="companion-rail"><span class="companion-fill"></span></div>
-      <div class="companion-chip">
+      <div class="companion-rail" aria-hidden="true"><span class="companion-fill"></span></div>
+      <div class="companion-chip" aria-hidden="true">
         <svg class="companion-art is-on" data-state="carrot" viewBox="0 0 120 120" width="44" height="44">
           <g transform="translate(18 1) scale(0.535)">
             <path class="c-leaf" fill="#7ea52c" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
@@ -69,7 +76,8 @@
           </g>
         </svg>
       </div>
-    </div>
+      <span class="companion-label">Pedir</span>
+    </a>
 
     <header class="site-header" data-header>
       <a class="brand" href="#inicio" aria-label="Carrot Dream, ir al inicio">
@@ -292,26 +300,27 @@
           <p class="lead lead-dark">Elegí el tamaño y la fecha. Nosotros hacemos el resto, desde cero.</p>
         </div>
 
+        <!-- Los dos discos están dibujados a escala real entre sí (20 y 24 cm) y
+             apoyados sobre la misma línea, para que la diferencia se vea sola. -->
         <div class="sizes" data-reveal>
-          <article class="size size-featured">
-            <div class="size-visual" aria-hidden="true"><span class="disc disc-20"></span></div>
-            <div class="size-body">
-              <p class="size-tag">La favorita</p>
-              <h3>Clásica</h3>
-              <p class="size-meta">20 cm de diámetro · 10 porciones generosas</p>
-              <p>Del tamaño de un plato de postre grande. Alcanza para una mesa de seis a diez personas.</p>
-              <p class="price">$ 38.400 <span>ARS</span></p>
-            </div>
-          </article>
           <article class="size">
-            <div class="size-visual" aria-hidden="true"><span class="disc disc-24"></span></div>
-            <div class="size-body">
-              <p class="size-tag">Para compartir</p>
-              <h3>Celebración</h3>
-              <p class="size-meta">24 cm de diámetro · 16 porciones generosas</p>
-              <p>La misma receta, un piso más alta. Para que sobre conversación y no torta.</p>
-              <p class="price">$ 56.800 <span>ARS</span></p>
-            </div>
+            <div class="size-disc" aria-hidden="true"><span style="--d: 104px"></span></div>
+            <h3>Clásica</h3>
+            <p class="size-dim">20 cm de diámetro</p>
+            <p class="size-count"><strong>10</strong> porciones</p>
+            <p class="size-desc">Para una mesa de seis a diez. El tamaño de un plato de postre grande.</p>
+            <p class="price">$ 38.400 <span>ARS</span></p>
+            <button class="button button-outline" type="button" data-pick="0">Elegir la Clásica</button>
+          </article>
+
+          <article class="size">
+            <div class="size-disc" aria-hidden="true"><span style="--d: 125px"></span></div>
+            <h3>Celebración</h3>
+            <p class="size-dim">24 cm de diámetro</p>
+            <p class="size-count"><strong>16</strong> porciones</p>
+            <p class="size-desc">La misma receta, un piso más alta. Para que sobre conversación y no torta.</p>
+            <p class="price">$ 56.800 <span>ARS</span></p>
+            <button class="button button-outline" type="button" data-pick="1">Elegir la Celebración</button>
           </article>
         </div>
 

@@ -25,8 +25,10 @@
 
   /* --- Revelado al entrar en pantalla ------------------------------------ */
 
+  /* El revelado se mantiene también con movimiento reducido: sin desplazamiento
+     (lo anula el CSS), sólo el fundido. */
   const revealItems = document.querySelectorAll("[data-reveal]");
-  if (reduced || !("IntersectionObserver" in window)) {
+  if (!("IntersectionObserver" in window)) {
     revealItems.forEach((el) => el.classList.add("is-visible"));
   } else {
     const observer = new IntersectionObserver(
@@ -211,9 +213,14 @@
 
   /* --- Bucle -------------------------------------------------------------- */
 
+  /* El recorrido del acompañante termina en el pedido, no al final de la
+     página: el aro se completa justo cuando la sección entra en pantalla. */
+  const orderSection = document.querySelector("#pedido");
   const pageProgress = () => {
-    const max = document.documentElement.scrollHeight - window.innerHeight;
-    return max > 0 ? clamp(scrollY / max, 0, 1) : 0;
+    const fallback = document.documentElement.scrollHeight - window.innerHeight;
+    if (!orderSection) return fallback > 0 ? clamp(scrollY / fallback, 0, 1) : 0;
+    const target = orderSection.getBoundingClientRect().top + scrollY - window.innerHeight * 0.62;
+    return clamp(scrollY / Math.max(1, target), 0, 1);
   };
 
   let last = 0;
@@ -237,9 +244,12 @@
       if (header) header.classList.toggle("is-stuck", scrollY > 24);
 
       if (companion) {
+        const reached = pageProgress();
         setCompanionState(currentZone());
-        companion.style.setProperty("--page", pageProgress().toFixed(4));
+        companion.style.setProperty("--page", reached.toFixed(4));
         companion.style.setProperty("--tilt", `${clamp(velocity * 0.5, -16, 16).toFixed(1)}deg`);
+        // Llegaste al pedido: el acompañante se abre como atajo al formulario.
+        companion.classList.toggle("is-arrived", reached > 0.995);
       }
       if (journey && moments.length) updateJourney();
       if (quote && quoteWords.length) updateQuote();
@@ -262,21 +272,21 @@
   };
 
   if (reduced) {
-    // Sin movimiento: una sola pasada para dejar cada cosa en su estado final.
+    // Sin movimiento: el acompañante cambia de estado y abre el atajo al llegar
+    // al pedido, pero nada se desplaza.
     moments.forEach((m) => m.classList.add("is-active"));
-    if (companion) {
+    const syncStatic = () => {
+      scrollY = window.scrollY;
+      if (header) header.classList.toggle("is-stuck", scrollY > 24);
+      if (!companion) return;
+      const reached = pageProgress();
       setCompanionState(currentZone());
-      companion.classList.add("is-awake");
-    }
-    window.addEventListener(
-      "scroll",
-      () => {
-        scrollY = window.scrollY;
-        if (header) header.classList.toggle("is-stuck", scrollY > 24);
-        if (companion) setCompanionState(currentZone());
-      },
-      { passive: true },
-    );
+      companion.style.setProperty("--page", reached.toFixed(4));
+      companion.classList.toggle("is-arrived", reached > 0.995);
+    };
+    if (companion) companion.classList.add("is-awake");
+    syncStatic();
+    window.addEventListener("scroll", syncStatic, { passive: true });
   } else {
     start();
     document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
@@ -309,6 +319,16 @@
   const form = document.querySelector("[data-order-form]");
   if (form) {
     const status = form.querySelector(".form-status");
+    const cakeField = form.querySelector('select[name="torta"]');
+
+    // "Elegir la Clásica" deja la opción cargada y baja al formulario.
+    document.querySelectorAll("[data-pick]").forEach((pick) => {
+      pick.addEventListener("click", () => {
+        if (cakeField) cakeField.selectedIndex = Number(pick.dataset.pick);
+        form.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+        form.querySelector('input[name="fecha"]')?.focus({ preventScroll: true });
+      });
+    });
     const dateField = form.querySelector('input[type="date"]');
 
     // Pedidos con 48 horas de anticipación.

@@ -53,17 +53,25 @@ Todo lo que depende del scroll se resuelve en un único bucle de
 `requestAnimationFrame` en `script.js`, que se pausa cuando la pestaña queda en
 segundo plano y deja de medir layout cuando la página está quieta.
 
-**El acompañante.** Una zanahoria ilustrada baja por el borde derecho junto con
-la página y va cambiando de estado según la sección que ocupa el centro de la
-pantalla: entera en el hero, rallada en la receta, torta en textura y origen, y
-caja de pedido al final. Durante "De la raíz a tu mesa" desaparece, porque ahí
-la zanahoria ya está en escena. Cada sección declara su estado con
-`data-companion-state`. En pantallas de menos de 900px se convierte en una barra
-inferior con la misma lógica.
+**El acompañante.** Una zanahoria ilustrada acompaña toda la lectura desde la
+esquina inferior derecha y va cambiando de estado según la sección que ocupa el
+centro de la pantalla: entera en el hero, rallada en la receta, torta en textura
+y origen, y caja de pedido al final. Durante "De la raíz a tu mesa" desaparece,
+porque ahí la zanahoria ya está en escena. Cada sección declara su estado con
+`data-companion-state`.
+
+Va fijo y no viaja: una versión anterior bajaba por el costado y terminaba
+cayendo justo sobre las costuras entre secciones, lo que se leía como un error.
+
+Su aro de progreso **no mide la página entera sino el camino hasta el pedido**:
+se completa cuando `#pedido` entra en pantalla y ahí el acompañante se abre como
+atajo al formulario. En pantallas de menos de 900px es una barra inferior con la
+misma lógica.
 
 Para que nunca le pase por encima a un renglón, arriba de 900px la caja de
-contenido (`--shell`) se angosta lo justo para dejarle lugar; medido, la
-separación mínima es de 16px a 1440px.
+contenido (`--shell`) se angosta lo justo para dejarle lugar y el footer suma
+aire al pie. La única superposición que queda es con la marquesina, que es una
+cinta decorativa a sangre completa.
 
 **Otros movimientos.** La frase del origen se enciende palabra por palabra con
 el scroll, la marquesina acelera y cambia de sentido según la velocidad del
@@ -77,9 +85,12 @@ ilustrada sobre un recorrido elíptico medido en tiempo real contra la escena,
 así nunca pisa el título ni el texto. Todo se anima con `transform` y
 `opacity`.
 
-Con `prefers-reduced-motion: reduce` la sección se convierte en una composición
-estática con los tres momentos visibles y legibles, el acompañante deja de
-viajar y la marquesina se detiene.
+**Movimiento reducido.** Con `prefers-reduced-motion: reduce` la sección se
+convierte en una composición estática con los tres momentos visibles y legibles,
+la marquesina se detiene y se cortan el parallax y los desplazamientos. Se
+mantienen los fundidos de opacidad, que no son un problema vestibular, así que
+la página sigue teniendo vida sin movimiento. Vale saberlo al revisar el sitio:
+si en tu equipo está activado, vas a ver esa versión y no la animada.
 
 ## Video de preparación
 
