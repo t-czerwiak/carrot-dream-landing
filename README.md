@@ -1,0 +1,82 @@
+# Carrot Dream — Landing
+
+Landing estática de Carrot Dream, repostería artesanal especializada en Carrot
+Cake. Sin dependencias ni build: HTML, CSS y JavaScript puro.
+
+Para verla, abrí `index.html` en el navegador o servila desde cualquier
+servidor estático:
+
+```bash
+npx serve .
+```
+
+## Estructura
+
+```
+index.html              marcado de la landing
+styles.css              estilos (paleta y tipografías del manual de marca)
+script.js               revelados, recorrido con scroll y formulario
+assets/brand-kit/       las páginas del manual, tal como fueron entregadas
+assets/img/             imágenes derivadas que usa la landing
+tools/build-assets.py   script que genera assets/img/ desde el brand kit
+```
+
+## Imágenes
+
+Los SVG de `assets/brand-kit/` son **páginas del manual de identidad**, no
+recursos sueltos: adentro de cada una hay fotos PNG incrustadas en base64.
+Usarlos directamente en la landing mostraba la portada completa del manual, y
+recortarlos con SVG anidados (`<image href="otro.svg">`) daba rectángulos
+grises en varios navegadores.
+
+`tools/build-assets.py` resuelve eso: extrae las fotos incrustadas, las recorta
+y las exporta como archivos planos a `assets/img/`. La landing sólo consume esos
+archivos.
+
+```bash
+python tools/build-assets.py   # requiere Pillow y numpy
+```
+
+Detalles a tener en cuenta si se regeneran:
+
+- La foto de producto sale de `Portada.svg` y se recorta siempre evitando el
+  destello de marca de la esquina inferior derecha.
+- El recorte del frosting (`Origen Marca.svg`) traía la marca de agua del banco
+  de imágenes en los píxeles semitransparentes; el script la elimina con un
+  umbral de alfa.
+- El logotipo se usa en su versión a color sobre fondo oscuro, como indica el
+  manual.
+
+## Animación
+
+La sección "De la raíz a tu mesa" ocupa 190vh con una escena sticky de 100dvh.
+`script.js` calcula el progreso del scroll, cruza los tres momentos (zanahoria,
+masa, torta terminada) y mueve la zanahoria ilustrada sobre un recorrido
+elíptico medido en tiempo real contra la escena, así nunca pisa el título ni el
+texto. Todo se anima con `transform` y `opacity`.
+
+Con `prefers-reduced-motion: reduce` la sección se convierte en una composición
+estática con los tres momentos visibles y legibles.
+
+## Video de preparación
+
+El bloque de textura está listo para recibir un video: cargá la URL en el
+atributo `data-video-src` de la `<figure class="frame frame-wide">` en
+`index.html`. `script.js` reemplaza la foto por un `<video>` en silencio y en
+loop, usando la imagen actual como póster.
+
+## Datos comerciales de demostración
+
+Precios, tamaños, dirección, horarios y WhatsApp son una propuesta creativa
+para esta maqueta. Antes de publicar hay que reemplazarlos:
+
+| Dato | Dónde |
+| --- | --- |
+| Número de WhatsApp | constante `WHATSAPP` en `script.js` y el enlace del footer en `index.html` |
+| Precios y tamaños | sección `.sizes` de `index.html` |
+| Instagram, email, dirección y horarios | `footer` de `index.html` |
+
+## Entregable
+
+`outputs/carrot-dream-landing/` es una copia del sitio lista para entregar. Si
+se tocan los archivos fuente, hay que sincronizarla.

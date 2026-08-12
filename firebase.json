@@ -1,0 +1,26 @@
+{
+  "hosting": {
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "assets/brand-kit/**",
+      "outputs/**",
+      "work/**",
+      "tools/**",
+      "**/*.md"
+    ],
+    "cleanUrls": true,
+    "headers": [
+      {
+        "source": "**/*.@(jpg|jpeg|webp|png|ico|svg)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
+      },
+      {
+        "source": "**/*.@(css|js)",
+        "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+      }
+    ]
+  }
+}

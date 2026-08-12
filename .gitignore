@@ -1,0 +1,16 @@
+# Copia entregable: se regenera con `python tools/sync-output.py`
+outputs/
+
+# Renders internos del manual usados para revisar la marca
+work/
+
+# Sistema / editores
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# Firebase
+.firebase/
+*.log

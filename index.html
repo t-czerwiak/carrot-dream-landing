@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Carrot Dream: Carrot Cake artesanal, sin huevo, hecha por pedido en Palermo, Buenos Aires. Dulzura en cada bocado."
+    />
+    <meta name="theme-color" content="#1a1008" />
+    <title>Carrot Dream — Dulzura en cada bocado</title>
+
+    <link rel="icon" href="assets/img/favicon.png" sizes="256x256" />
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preload" as="image" href="assets/img/cake-hero.jpg" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+    <header class="site-header" data-header>
+      <a class="brand" href="#inicio" aria-label="Carrot Dream, ir al inicio">
+        <img src="assets/img/logo-horizontal.webp" alt="Carrot Dream" width="760" height="215" />
+      </a>
+      <nav class="site-nav" aria-label="Navegación principal">
+        <a href="#receta">La receta</a>
+        <a href="#recorrido">El recorrido</a>
+        <a href="#origen">Origen</a>
+      </nav>
+      <a class="button button-ghost header-cta" href="#pedido">Hacer un pedido</a>
+    </header>
+
+    <main id="contenido">
+      <!-- ── Hero ─────────────────────────────────────────────── -->
+      <section class="hero" id="inicio" aria-labelledby="hero-title">
+        <div class="hero-inner">
+          <div class="hero-copy" data-reveal>
+            <p class="kicker">Repostería artesanal · Buenos Aires</p>
+            <h1 id="hero-title">La torta<br /><i>del sueño.</i></h1>
+            <p class="lead">Carrot Cake artesanal. Sin huevo. Con amor.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#pedido">Quiero mi Carrot Cake</a>
+              <a class="link-underline" href="#origen">Conocé nuestra historia</a>
+            </div>
+          </div>
+
+          <div class="hero-visual" data-reveal>
+            <figure class="frame frame-portrait">
+              <img
+                src="assets/img/cake-hero.jpg"
+                width="894"
+                height="1118"
+                alt="Carrot Cake de Carrot Dream con frosting de queso crema y nueces sobre un pie de torta de cerámica"
+                fetchpriority="high"
+              />
+            </figure>
+            <img class="hero-seal" src="assets/img/mark.webp" width="512" height="519" alt="" aria-hidden="true" />
+          </div>
+        </div>
+
+        <ul class="trust-band" data-reveal>
+          <li>
+            <h2>Hecha desde cero</h2>
+            <p>Rallamos, mezclamos y horneamos en el día. Nada viene de una premezcla.</p>
+          </li>
+          <li>
+            <h2>Sin huevo</h2>
+            <p>La receta nació así. No es una versión adaptada: es la original.</p>
+          </li>
+          <li>
+            <h2>Preparada por pedido</h2>
+            <p>Cada torta se hornea para una fecha concreta. No hay stock ni vitrina.</p>
+          </li>
+        </ul>
+      </section>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee-track">
+          <span>Dulzura en cada bocado</span><b></b><span>Carrot Cake artesanal</span><b></b><span>Hecha desde la raíz</span><b></b>
+          <span>Dulzura en cada bocado</span><b></b><span>Carrot Cake artesanal</span><b></b><span>Hecha desde la raíz</span><b></b>
+        </div>
+      </div>
+
+      <!-- ── La receta ────────────────────────────────────────── -->
+      <section class="recipe" id="receta" aria-labelledby="recipe-title">
+        <div class="recipe-head" data-reveal>
+          <p class="kicker kicker-dark">La receta</p>
+          <h2 id="recipe-title">Todo lo que queremos<br />en <i>una torta.</i></h2>
+          <p class="lead lead-dark">
+            Húmeda, especiada y generosa. La zanahoria hace su trabajo en silencio y el frosting se
+            lleva los aplausos.
+          </p>
+        </div>
+
+        <ul class="ingredients">
+          <li data-reveal>
+            <div class="ingredient-media"><img src="assets/img/carrots.webp" width="760" height="661" alt="Zanahorias frescas con sus hojas" loading="lazy" /></div>
+            <h3>Zanahoria</h3>
+            <p>Rallada fina el mismo día. Aporta humedad y todo el dulzor de base.</p>
+          </li>
+          <li data-reveal>
+            <div class="ingredient-media"><img src="assets/img/milk.webp" width="620" height="835" alt="Botella de leche y vaso servido" loading="lazy" /></div>
+            <h3>Leche y yogurt</h3>
+            <p>El reemplazo del huevo. Dan una miga aireada que se sostiene sola.</p>
+          </li>
+          <li data-reveal>
+            <div class="ingredient-media"><img src="assets/img/walnuts.webp" width="720" height="707" alt="Nueces peladas en un bol oscuro" loading="lazy" /></div>
+            <h3>Nueces</h3>
+            <p>Tostadas antes de entrar a la masa, para que el crocante dure.</p>
+          </li>
+          <li data-reveal>
+            <div class="ingredient-media"><img src="assets/img/frosting.webp" width="720" height="605" alt="Frosting de queso crema batido" loading="lazy" /></div>
+            <h3>Queso crema</h3>
+            <p>Frosting con azúcar impalpable, batido apenas. Fresco, nunca empalagoso.</p>
+          </li>
+        </ul>
+      </section>
+
+      <!-- ── Recorrido con scroll ─────────────────────────────── -->
+      <section class="journey" id="recorrido" data-journey aria-labelledby="journey-title">
+        <div class="journey-scene">
+          <div class="journey-head">
+            <p class="kicker">El recorrido</p>
+            <h2 id="journey-title">De la raíz <i>a tu mesa.</i></h2>
+          </div>
+
+          <div class="journey-stage">
+            <div class="journey-ring" aria-hidden="true">
+              <span class="ring-line"></span>
+              <span class="ring-line ring-line-alt"></span>
+            </div>
+
+            <div class="journey-plates">
+              <div class="moment" data-stage="0">
+                <figure class="plate">
+                  <img src="assets/img/carrots.webp" width="760" height="661" alt="Zanahorias recién lavadas" loading="lazy" />
+                </figure>
+                <div class="moment-copy">
+                  <h3>Zanahoria fresca</h3>
+                  <p>Todo arranca en la verdulería de la esquina. Rallada fina, sin atajos.</p>
+                </div>
+              </div>
+
+              <div class="moment" data-stage="1">
+                <figure class="plate plate-duo">
+                  <img class="plate-a" src="assets/img/milk.webp" width="620" height="835" alt="Leche y yogurt para la masa" loading="lazy" />
+                  <img class="plate-b" src="assets/img/walnuts.webp" width="720" height="707" alt="Nueces tostadas para la masa" loading="lazy" />
+                </figure>
+                <div class="moment-copy">
+                  <h3>Masa húmeda</h3>
+                  <p>Leche, yogurt y nueces tostadas. La masa toma cuerpo sin un solo huevo.</p>
+                </div>
+              </div>
+
+              <div class="moment" data-stage="2">
+                <figure class="plate plate-photo">
+                  <img src="assets/img/cake-round.jpg" width="792" height="792" alt="La Carrot Cake terminada, con frosting y nueces" loading="lazy" />
+                </figure>
+                <div class="moment-copy">
+                  <h3>Tu primer bocado</h3>
+                  <p>Frosting de queso crema, una noche de reposo y la torta lista para tu mesa.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="journey-orbit" aria-hidden="true">
+              <svg class="orbit-carrot" viewBox="0 0 150 224" role="presentation">
+                <path class="carrot-leaf" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
+                <path class="carrot-leaf" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
+                <path class="carrot-body" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
+                <path class="carrot-line" d="M55 103c15 4 31 3 45-4M48 132c16 5 33 3 48-5M44 160c14 4 27 3 40-5" />
+              </svg>
+            </div>
+
+            <div class="crumbs" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+
+          <div class="journey-rail" aria-hidden="true">
+            <span class="rail-track"></span>
+            <span class="rail-fill"></span>
+            <i data-stage="0"></i><i data-stage="1"></i><i data-stage="2"></i>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Textura / video ──────────────────────────────────── -->
+      <section class="texture" aria-labelledby="texture-title">
+        <div class="texture-copy" data-reveal>
+          <p class="kicker kicker-dark">La textura</p>
+          <h2 id="texture-title">Suave por dentro.<br /><i>Inolvidable</i> afuera.</h2>
+          <p class="lead lead-dark">
+            Miga húmeda y compacta, frosting apenas frío y nuez tostada arriba. Se corta con
+            cuchara y se sostiene en la mano.
+          </p>
+          <p class="note">
+            Descansa una noche en frío antes de salir: la miga se asienta y el frosting toma cuerpo.
+          </p>
+        </div>
+        <figure class="frame frame-wide" data-video-src="" data-poster="assets/img/cake-wide.jpg" data-reveal>
+          <img src="assets/img/cake-wide.jpg" width="1398" height="894" alt="La Carrot Cake completa sobre una mesa de madera con un lienzo de lino" loading="lazy" />
+        </figure>
+      </section>
+
+      <!-- ── Origen ───────────────────────────────────────────── -->
+      <section class="origin" id="origen" aria-labelledby="origin-title">
+        <div class="origin-head" data-reveal>
+          <p class="kicker kicker-light">El origen</p>
+          <h2 id="origin-title">Todo empezó con una restricción<br />y mucha <i>curiosidad.</i></h2>
+        </div>
+
+        <ol class="origin-steps" data-reveal>
+          <li>
+            <h3>La restricción</h3>
+            <p>Alguien de la familia no podía comer huevo y igual quería una torta de cumpleaños.</p>
+          </li>
+          <li>
+            <h3>La búsqueda</h3>
+            <p>Probamos con zanahoria, leche y yogurt hasta encontrar una miga que se sostuviera.</p>
+          </li>
+          <li>
+            <h3>El hallazgo</h3>
+            <p>Nueces tostadas y frosting de queso crema con azúcar impalpable cerraron el balance.</p>
+          </li>
+          <li>
+            <h3>Carrot Dream</h3>
+            <p>Lo que empezó como una solución casera terminó siendo una torta con nombre propio.</p>
+          </li>
+        </ol>
+
+        <p class="origin-quote" data-reveal>Una limitación se convirtió en identidad.</p>
+      </section>
+
+      <!-- ── Pedido ───────────────────────────────────────────── -->
+      <section class="order" id="pedido" aria-labelledby="order-title">
+        <div class="order-head" data-reveal>
+          <p class="kicker kicker-dark">Pedidos</p>
+          <h2 id="order-title">Tu próximo<br /><i>momento dulce.</i></h2>
+          <p class="lead lead-dark">Elegí el tamaño y la fecha. Nosotros hacemos el resto, desde cero.</p>
+        </div>
+
+        <div class="sizes" data-reveal>
+          <article class="size size-featured">
+            <div class="size-visual" aria-hidden="true"><span class="disc disc-20"></span></div>
+            <div class="size-body">
+              <p class="size-tag">La favorita</p>
+              <h3>Clásica</h3>
+              <p class="size-meta">20 cm de diámetro · 10 porciones generosas</p>
+              <p>Del tamaño de un plato de postre grande. Alcanza para una mesa de seis a diez personas.</p>
+              <p class="price">$ 38.400 <span>ARS</span></p>
+            </div>
+          </article>
+          <article class="size">
+            <div class="size-visual" aria-hidden="true"><span class="disc disc-24"></span></div>
+            <div class="size-body">
+              <p class="size-tag">Para compartir</p>
+              <h3>Celebración</h3>
+              <p class="size-meta">24 cm de diámetro · 16 porciones generosas</p>
+              <p>La misma receta, un piso más alta. Para que sobre conversación y no torta.</p>
+              <p class="price">$ 56.800 <span>ARS</span></p>
+            </div>
+          </article>
+        </div>
+
+        <div class="how" data-reveal>
+          <h3 class="how-title">Cómo pedir</h3>
+          <ol class="how-steps">
+            <li>
+              <h4>Escribinos</h4>
+              <p>Completá el formulario y se abre WhatsApp con tu pedido ya redactado.</p>
+            </li>
+            <li>
+              <h4>Confirmamos</h4>
+              <p>Te respondemos la disponibilidad de la fecha y coordinamos la seña.</p>
+            </li>
+            <li>
+              <h4>La retirás</h4>
+              <p>Recién hecha, fría y en su caja. También la llevamos a domicilio.</p>
+            </li>
+          </ol>
+          <dl class="availability">
+            <div>
+              <dt>Anticipación</dt>
+              <dd>48 horas mínimo</dd>
+            </div>
+            <div>
+              <dt>Producción</dt>
+              <dd>Miércoles a sábado</dd>
+            </div>
+            <div>
+              <dt>Entrega</dt>
+              <dd>Retiro en Palermo o envío</dd>
+            </div>
+          </dl>
+        </div>
+
+        <form class="order-form" data-order-form data-reveal>
+          <div class="form-head">
+            <h3>Pedido rápido</h3>
+            <p>Preparamos el mensaje y lo abrimos en WhatsApp para que sólo tengas que enviarlo.</p>
+          </div>
+          <div class="form-fields">
+            <label>
+              <span>¿Cuál querés?</span>
+              <select name="torta" required>
+                <option value="Carrot Cake Clásica — 20 cm / 10 porciones">Clásica · 20 cm · 10 porciones</option>
+                <option value="Carrot Cake Celebración — 24 cm / 16 porciones">Celebración · 24 cm · 16 porciones</option>
+              </select>
+            </label>
+            <label>
+              <span>¿Para cuándo?</span>
+              <input name="fecha" type="date" required />
+            </label>
+            <label>
+              <span>Tu nombre</span>
+              <input name="nombre" type="text" autocomplete="name" placeholder="¿Cómo te llamás?" required />
+            </label>
+            <label>
+              <span>Un detalle (opcional)</span>
+              <input name="detalle" type="text" placeholder="Ej.: la retiro el sábado a la tarde" />
+            </label>
+          </div>
+          <div class="form-action">
+            <p>Respondemos de miércoles a sábado, de 10 a 18 h.</p>
+            <button class="button button-primary" type="submit">Pedir por WhatsApp</button>
+          </div>
+          <p class="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-top">
+        <div class="footer-brand">
+          <img src="assets/img/logo-horizontal.webp" width="760" height="215" alt="Carrot Dream" loading="lazy" />
+          <p>Dulzura en cada bocado.</p>
+        </div>
+        <div class="footer-contact">
+          <a href="https://instagram.com/carrotdream.ba" target="_blank" rel="noreferrer noopener">
+            <span>Instagram</span>@carrotdream.ba
+          </a>
+          <a href="mailto:hola@carrotdream.com.ar"><span>Email</span>hola@carrotdream.com.ar</a>
+          <a href="https://wa.me/5491100000000" target="_blank" rel="noreferrer noopener">
+            <span>WhatsApp</span>+54 11 0000 0000
+          </a>
+        </div>
+        <div class="footer-meta">
+          <p><span>Dónde</span>Palermo, Buenos Aires</p>
+          <p><span>Cuándo</span>Miércoles a sábado, de 10 a 18 h</p>
+          <p><span>Pedidos</span>Con 48 horas de anticipación</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Carrot Dream. Repostería artesanal.</p>
+        <a href="#inicio">Volver arriba</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
