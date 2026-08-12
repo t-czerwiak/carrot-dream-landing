@@ -63,10 +63,11 @@ porque ahí la zanahoria ya está en escena. Cada sección declara su estado con
 Va fijo y no viaja: una versión anterior bajaba por el costado y terminaba
 cayendo justo sobre las costuras entre secciones, lo que se leía como un error.
 
-Su aro de progreso **no mide la página entera sino el camino hasta el pedido**:
-se completa cuando `#pedido` entra en pantalla y ahí el acompañante se abre como
-atajo al formulario. En pantallas de menos de 900px es una barra inferior con la
-misma lógica.
+Flota despacio, se inclina y se estira con la velocidad del scroll, y cambia de
+estado con un rebote. Su aro de progreso **no mide la página entera sino el
+camino hasta el pedido**: se completa cuando `#pedido` entra en pantalla, y ahí
+el acompañante se apaga y le pasa la posta al cupón de esa sección. En pantallas
+de menos de 900px es una barra inferior con la misma lógica.
 
 Para que nunca le pase por encima a un renglón, arriba de 900px la caja de
 contenido (`--shell`) se angosta lo justo para dejarle lugar y el footer suma
@@ -91,6 +92,16 @@ la marquesina se detiene y se cortan el parallax y los desplazamientos. Se
 mantienen los fundidos de opacidad, que no son un problema vestibular, así que
 la página sigue teniendo vida sin movimiento. Vale saberlo al revisar el sitio:
 si en tu equipo está activado, vas a ver esa versión y no la animada.
+
+## Cupón
+
+Al final del recorrido, en la sección de pedido, aparece un cupón canjeable: al
+usarlo se marca como aplicado y el código se suma al mensaje de WhatsApp.
+
+**El descuento y el código son de demostración.** Para cambiarlos hay que tocar
+dos lugares: el texto del bloque `.coupon` en `index.html` y las constantes
+`couponCode` / `couponOff` en `script.js`. Para sacarlo, se borra el bloque
+`.coupon` del HTML.
 
 ## Video de preparación
 

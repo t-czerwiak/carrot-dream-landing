@@ -31,9 +31,9 @@
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
-    <!-- Acompañante: cambia de estado según la sección y su aro se completa
-         justo al llegar al pedido, donde se abre como atajo al formulario. -->
-    <a class="companion" data-companion href="#pedido" aria-label="Ir a hacer un pedido">
+    <!-- Acompañante: cambia de estado según la sección y su aro se completa al
+         llegar al pedido, donde le pasa la posta al cupón. -->
+    <div class="companion" data-companion aria-hidden="true">
       <svg class="companion-ring" viewBox="0 0 100 100" aria-hidden="true">
         <circle class="ring-bg" cx="50" cy="50" r="46" />
         <circle class="ring-fg" cx="50" cy="50" r="46" />
@@ -76,8 +76,7 @@
           </g>
         </svg>
       </div>
-      <span class="companion-label">Pedir</span>
-    </a>
+    </div>
 
     <header class="site-header" data-header>
       <a class="brand" href="#inicio" aria-label="Carrot Dream, ir al inicio">
@@ -300,27 +299,50 @@
           <p class="lead lead-dark">Elegí el tamaño y la fecha. Nosotros hacemos el resto, desde cero.</p>
         </div>
 
+        <!-- Llega el acompañante y se transforma en cupón. El porcentaje y el
+             código son de demostración: cambialos en index.html y script.js. -->
+        <div class="coupon" data-coupon data-reveal>
+          <div class="coupon-mark" aria-hidden="true">
+            <svg viewBox="0 0 120 120" width="52" height="52">
+              <g transform="translate(18 1) scale(0.535)">
+                <path fill="#7ea52c" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
+                <path fill="#7ea52c" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
+                <path fill="#f28c28" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
+              </g>
+            </svg>
+          </div>
+          <div class="coupon-copy">
+            <p class="coupon-off">Llegaste hasta acá: <strong>10% en tu primer pedido.</strong></p>
+            <p class="coupon-note">Código <b data-coupon-code>CARROT10</b> · lo sumamos al mensaje de WhatsApp.</p>
+          </div>
+          <button class="button button-primary" type="button" data-coupon-use>Usar el cupón</button>
+        </div>
+
         <!-- Los dos discos están dibujados a escala real entre sí (20 y 24 cm) y
              apoyados sobre la misma línea, para que la diferencia se vea sola. -->
         <div class="sizes" data-reveal>
           <article class="size">
-            <div class="size-disc" aria-hidden="true"><span style="--d: 104px"></span></div>
+            <div class="size-photo" aria-hidden="true">
+              <span style="--d: 132px"><img src="assets/img/cake-round.jpg" width="792" height="792" alt="" loading="lazy" /></span>
+            </div>
             <h3>Clásica</h3>
             <p class="size-dim">20 cm de diámetro</p>
             <p class="size-count"><strong>10</strong> porciones</p>
             <p class="size-desc">Para una mesa de seis a diez. El tamaño de un plato de postre grande.</p>
-            <p class="price">$ 38.400 <span>ARS</span></p>
-            <button class="button button-outline" type="button" data-pick="0">Elegir la Clásica</button>
+            <p class="price"><span class="cur">$</span>38.400 <span class="cur">ARS</span></p>
+            <button class="button button-primary" type="button" data-pick="0">Elegir la Clásica</button>
           </article>
 
           <article class="size">
-            <div class="size-disc" aria-hidden="true"><span style="--d: 125px"></span></div>
+            <div class="size-photo" aria-hidden="true">
+              <span style="--d: 158px"><img src="assets/img/cake-round.jpg" width="792" height="792" alt="" loading="lazy" /></span>
+            </div>
             <h3>Celebración</h3>
             <p class="size-dim">24 cm de diámetro</p>
             <p class="size-count"><strong>16</strong> porciones</p>
             <p class="size-desc">La misma receta, un piso más alta. Para que sobre conversación y no torta.</p>
-            <p class="price">$ 56.800 <span>ARS</span></p>
-            <button class="button button-outline" type="button" data-pick="1">Elegir la Celebración</button>
+            <p class="price"><span class="cur">$</span>56.800 <span class="cur">ARS</span></p>
+            <button class="button button-primary" type="button" data-pick="1">Elegir la Celebración</button>
           </article>
         </div>
 

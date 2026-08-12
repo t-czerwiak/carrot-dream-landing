@@ -247,7 +247,11 @@
         const reached = pageProgress();
         setCompanionState(currentZone());
         companion.style.setProperty("--page", reached.toFixed(4));
+        // Se inclina y se estira apenas con la velocidad del scroll.
+        const speed = Math.abs(velocity);
         companion.style.setProperty("--tilt", `${clamp(velocity * 0.5, -16, 16).toFixed(1)}deg`);
+        companion.style.setProperty("--sy", (1 + clamp(speed * 0.004, 0, 0.14)).toFixed(3));
+        companion.style.setProperty("--sx", (1 - clamp(speed * 0.002, 0, 0.07)).toFixed(3));
         // Llegaste al pedido: el acompañante se abre como atajo al formulario.
         companion.classList.toggle("is-arrived", reached > 0.995);
       }
@@ -314,6 +318,15 @@
     if (!reduced) video.play().catch(() => {});
   }
 
+  /* --- Cupón --------------------------------------------------------------
+     El descuento y el código son de demostración: cambialos acá y en el texto
+     del cupón en index.html, o borrá el bloque entero si no va. */
+
+  const coupon = document.querySelector("[data-coupon]");
+  const couponCode = coupon?.querySelector("[data-coupon-code]")?.textContent.trim() || "";
+  const couponOff = "10%";
+  let couponUsed = false;
+
   /* --- Formulario de pedido ----------------------------------------------- */
 
   const form = document.querySelector("[data-order-form]");
@@ -322,6 +335,17 @@
     const cakeField = form.querySelector('select[name="torta"]');
 
     // "Elegir la Clásica" deja la opción cargada y baja al formulario.
+    if (coupon) {
+      const useButton = coupon.querySelector("[data-coupon-use]");
+      useButton?.addEventListener("click", () => {
+        couponUsed = true;
+        coupon.classList.add("is-used");
+        useButton.textContent = "Cupón aplicado";
+        if (status) status.textContent = `Cupón ${couponCode} listo: lo sumamos a tu pedido.`;
+        form.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+      });
+    }
+
     document.querySelectorAll("[data-pick]").forEach((pick) => {
       pick.addEventListener("click", () => {
         if (cakeField) cakeField.selectedIndex = Number(pick.dataset.pick);
@@ -353,6 +377,7 @@
         `Fecha: ${readableDate(data.get("fecha"))}`,
         `Nombre: ${data.get("nombre")}`,
         data.get("detalle") ? `Detalle: ${data.get("detalle")}` : "",
+        couponUsed ? `Cupón: ${couponCode} (${couponOff} de descuento)` : "",
       ]
         .filter(Boolean)
         .join("\n");
