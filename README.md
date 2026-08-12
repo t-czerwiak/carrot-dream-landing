@@ -49,14 +49,37 @@ Detalles a tener en cuenta si se regeneran:
 
 ## Animación
 
-La sección "De la raíz a tu mesa" ocupa 190vh con una escena sticky de 100dvh.
-`script.js` calcula el progreso del scroll, cruza los tres momentos (zanahoria,
-masa, torta terminada) y mueve la zanahoria ilustrada sobre un recorrido
-elíptico medido en tiempo real contra la escena, así nunca pisa el título ni el
-texto. Todo se anima con `transform` y `opacity`.
+Todo lo que depende del scroll se resuelve en un único bucle de
+`requestAnimationFrame` en `script.js`, que se pausa cuando la pestaña queda en
+segundo plano y deja de medir layout cuando la página está quieta.
+
+**El acompañante.** Una zanahoria ilustrada baja por el borde derecho junto con
+la página y va cambiando de estado según la sección que ocupa el centro de la
+pantalla: entera en el hero, rallada en la receta, torta en textura y origen, y
+caja de pedido al final. Durante "De la raíz a tu mesa" desaparece, porque ahí
+la zanahoria ya está en escena. Cada sección declara su estado con
+`data-companion-state`. En pantallas de menos de 900px se convierte en una barra
+inferior con la misma lógica.
+
+Para que nunca le pase por encima a un renglón, arriba de 900px la caja de
+contenido (`--shell`) se angosta lo justo para dejarle lugar; medido, la
+separación mínima es de 16px a 1440px.
+
+**Otros movimientos.** La frase del origen se enciende palabra por palabra con
+el scroll, la marquesina acelera y cambia de sentido según la velocidad del
+scroll, y la foto del hero y la de textura se desplazan despacio dentro de su
+marco.
+
+**El recorrido.** La sección "De la raíz a tu mesa" ocupa 190vh con una escena
+sticky de 100dvh.
+Cruza los tres momentos (zanahoria, masa, torta terminada) y mueve la zanahoria
+ilustrada sobre un recorrido elíptico medido en tiempo real contra la escena,
+así nunca pisa el título ni el texto. Todo se anima con `transform` y
+`opacity`.
 
 Con `prefers-reduced-motion: reduce` la sección se convierte en una composición
-estática con los tres momentos visibles y legibles.
+estática con los tres momentos visibles y legibles, el acompañante deja de
+viajar y la marquesina se detiene.
 
 ## Video de preparación
 

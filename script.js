@@ -1,5 +1,8 @@
 /* Carrot Dream — interacciones de la landing.
-   Sin dependencias. Todas las animaciones se resuelven con transform y opacity. */
+   Sin dependencias. Todas las animaciones se resuelven con transform y opacity.
+
+   Todo lo que depende del scroll se calcula en un único bucle de
+   requestAnimationFrame (`frame`), para no encadenar listeners que se pisen. */
 
 (() => {
   "use strict";
@@ -9,15 +12,22 @@
   const WHATSAPP = "5491100000000";
 
   const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const reduced = motionQuery.matches;
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+  /* Suaviza los extremos de un rango: evita saltos al entrar y salir. */
+  const ramp = (value, from, to) => {
+    const t = clamp((value - from) / (to - from), 0, 1);
+    return t * t * (3 - 2 * t);
+  };
+
+  let scrollY = window.scrollY;
+  let velocity = 0;
 
   /* --- Revelado al entrar en pantalla ------------------------------------ */
 
   const revealItems = document.querySelectorAll("[data-reveal]");
-  const showAll = () => revealItems.forEach((el) => el.classList.add("is-visible"));
-
-  if (motionQuery.matches || !("IntersectionObserver" in window)) {
-    showAll();
+  if (reduced || !("IntersectionObserver" in window)) {
+    revealItems.forEach((el) => el.classList.add("is-visible"));
   } else {
     const observer = new IntersectionObserver(
       (entries, self) => {
@@ -35,100 +45,245 @@
   /* --- Header sólido al bajar -------------------------------------------- */
 
   const header = document.querySelector("[data-header]");
-  if (header) {
-    const syncHeader = () => header.classList.toggle("is-stuck", window.scrollY > 24);
-    window.addEventListener("scroll", syncHeader, { passive: true });
-    syncHeader();
-  }
+
+  /* --- Acompañante -------------------------------------------------------- */
+
+  const companion = document.querySelector("[data-companion]");
+  const arts = companion ? [...companion.querySelectorAll(".companion-art")] : [];
+  const zones = [...document.querySelectorAll("[data-companion-state]")];
+  let companionState = "carrot";
+
+  const setCompanionState = (state) => {
+    // El estado "none" es el recorrido: ahí la zanahoria ya está en escena.
+    companion.classList.toggle("is-awake", state !== "none");
+    if (state === companionState || state === "none") return;
+    companionState = state;
+    arts.forEach((art) => art.classList.toggle("is-on", art.dataset.state === state));
+  };
+
+  /* Gana la sección que ocupa el centro de la pantalla. */
+  const currentZone = () => {
+    const middle = window.innerHeight / 2;
+    for (const zone of zones) {
+      const box = zone.getBoundingClientRect();
+      if (box.top <= middle && box.bottom >= middle) return zone.dataset.companionState;
+    }
+    return companionState === "none" ? "carrot" : companionState;
+  };
 
   /* --- Recorrido: "De la raíz a tu mesa" ---------------------------------- */
 
   const journey = document.querySelector("[data-journey]");
   const moments = journey ? [...journey.querySelectorAll(".moment")] : [];
   const railDots = journey ? [...journey.querySelectorAll(".journey-rail i")] : [];
+  const stage = journey?.querySelector(".journey-stage");
+  const plates = journey?.querySelector(".journey-plates");
+  const carrot = journey?.querySelector(".orbit-carrot");
+  let activeMoment = -1;
+  let path = null;
 
-  if (journey && moments.length) {
-    const stage = journey.querySelector(".journey-stage");
-    const plates = journey.querySelector(".journey-plates");
-    const carrot = journey.querySelector(".orbit-carrot");
+  const setMoment = (index) => {
+    if (index === activeMoment) return;
+    activeMoment = index;
+    moments.forEach((m, i) => m.classList.toggle("is-active", i === index));
+    railDots.forEach((dot, i) => dot.classList.toggle("is-active", i <= index));
+  };
 
-    let active = -1;
-    let path = null;
+  /* Radios del recorrido, medidos sobre la escena real: la zanahoria pasa
+     por afuera del plato sin llegar nunca al título ni al texto. */
+  const measureJourney = () => {
+    if (!stage || !plates || !carrot) return null;
+    const scene = stage.getBoundingClientRect();
+    const disc = plates.getBoundingClientRect();
+    if (!scene.height || !disc.width) return null;
 
-    const setStage = (index) => {
-      if (index === active) return;
-      active = index;
-      moments.forEach((m, i) => m.classList.toggle("is-active", i === index));
-      railDots.forEach((dot, i) => dot.classList.toggle("is-active", i <= index));
+    const half = disc.width / 2;
+    const carrotHalf = (carrot.getBoundingClientRect().height || 60) / 2;
+    const roomAbove = disc.top - scene.top;
+
+    return {
+      cx: disc.left + half - scene.left,
+      cy: disc.top + half - scene.top,
+      rx: half + clamp(scene.width * 0.055, 46, 118),
+      ry: half + clamp(roomAbove - carrotHalf - 12, 18, 92),
     };
+  };
 
-    /* Radios del recorrido, medidos sobre la escena real: la zanahoria pasa
-       por afuera del plato sin llegar nunca al título ni al texto. */
-    const measure = () => {
-      if (!stage || !plates || !carrot) return null;
-      const scene = stage.getBoundingClientRect();
-      const disc = plates.getBoundingClientRect();
-      if (!scene.height || !disc.width) return null;
+  const updateJourney = () => {
+    const box = journey.getBoundingClientRect();
+    const range = Math.max(1, journey.offsetHeight - window.innerHeight);
+    const progress = clamp(-box.top / range, 0, 1);
 
-      const half = disc.width / 2;
-      const carrotHalf = (carrot.getBoundingClientRect().height || 60) / 2;
-      const roomAbove = disc.top - scene.top;
+    journey.style.setProperty("--p", progress.toFixed(4));
+    // Las migas aparecen recién sobre el final del recorrido.
+    journey.style.setProperty("--crumbs", clamp((progress - 0.78) / 0.14, 0, 1).toFixed(3));
+    setMoment(Math.min(moments.length - 1, Math.floor(progress * moments.length)));
 
-      return {
-        cx: disc.left + half - scene.left,
-        cy: disc.top + half - scene.top,
-        rx: half + clamp(scene.width * 0.055, 46, 118),
-        ry: half + clamp(roomAbove - carrotHalf - 12, 18, 92),
-      };
-    };
+    if (!path) path = measureJourney();
+    if (!path || !carrot) return;
 
-    const update = () => {
-      const rect = journey.getBoundingClientRect();
-      const range = Math.max(1, journey.offsetHeight - window.innerHeight);
-      const progress = clamp(-rect.top / range, 0, 1);
+    // Arranca a la izquierda del plato, sube por arriba y baja por la derecha;
+    // sobre el final el radio se cierra y la zanahoria se hunde detrás de la
+    // torta terminada.
+    const angle = (-104 + progress * 274) * (Math.PI / 180);
+    const sink = 1 - 0.78 * clamp((progress - 0.82) / 0.18, 0, 1);
+    const style = carrot.style;
+    style.setProperty("--x", `${(path.cx + Math.sin(angle) * path.rx * sink).toFixed(1)}px`);
+    style.setProperty("--y", `${(path.cy - Math.cos(angle) * path.ry * sink).toFixed(1)}px`);
+    style.setProperty("--rot", `${(-24 + progress * 384).toFixed(1)}deg`);
+    style.setProperty("--carrot-s", (1.06 - progress * 0.3).toFixed(3));
+    style.setProperty("--carrot-o", clamp((0.97 - progress) / 0.08, 0, 1).toFixed(3));
+  };
 
-      journey.style.setProperty("--p", progress.toFixed(4));
-      // Las migas aparecen recién sobre el final del recorrido.
-      journey.style.setProperty("--crumbs", clamp((progress - 0.78) / 0.14, 0, 1).toFixed(3));
-      setStage(Math.min(moments.length - 1, Math.floor(progress * moments.length)));
+  /* --- Frase del origen, palabra por palabra ------------------------------ */
 
-      if (!path) path = measure();
-      if (!path || !carrot) return;
+  const quote = document.querySelector("[data-scrub]");
+  const quoteWords = quote ? [...quote.querySelectorAll("span")] : [];
+  if (quote && quoteWords.length && !reduced) quote.classList.add("is-scrubbing");
 
-      // Arranca a la izquierda del plato, sube por arriba y baja por la
-      // derecha; sobre el final el radio se cierra y la zanahoria se hunde
-      // detrás de la torta terminada.
-      const angle = (-104 + progress * 274) * (Math.PI / 180);
-      const sink = 1 - 0.78 * clamp((progress - 0.82) / 0.18, 0, 1);
-      const style = carrot.style;
-      style.setProperty("--x", `${(path.cx + Math.sin(angle) * path.rx * sink).toFixed(1)}px`);
-      style.setProperty("--y", `${(path.cy - Math.cos(angle) * path.ry * sink).toFixed(1)}px`);
-      style.setProperty("--rot", `${(-24 + progress * 384).toFixed(1)}deg`);
-      style.setProperty("--carrot-s", (1.06 - progress * 0.3).toFixed(3));
-      style.setProperty("--carrot-o", clamp((0.97 - progress) / 0.08, 0, 1).toFixed(3));
-    };
+  const updateQuote = () => {
+    const box = quote.getBoundingClientRect();
+    // De 0 a 1 mientras la frase cruza el tercio inferior de la pantalla.
+    const progress = ramp(box.top, window.innerHeight * 0.82, window.innerHeight * 0.3);
+    quoteWords.forEach((word, i) => {
+      // La última palabra tiene que llegar a 1 antes de que termine el rango.
+      const start = (i / quoteWords.length) * 0.66;
+      word.style.setProperty("--w", (0.26 + 0.74 * ramp(progress, start, start + 0.3)).toFixed(3));
+    });
+  };
 
-    if (motionQuery.matches) {
-      moments.forEach((m) => m.classList.add("is-active"));
+  /* --- Parallax del hero --------------------------------------------------- */
+
+  /* Sólo capas internas del hero: los contenedores con [data-reveal] no se
+     tocan, porque su animación de entrada también usa transform. */
+  const heroFrame = document.querySelector(".hero-visual .frame");
+  const parallaxItems = [...document.querySelectorAll("[data-parallax]")];
+
+  const updateHero = () => {
+    const shift = Math.min(scrollY, window.innerHeight);
+    if (heroFrame) heroFrame.style.transform = `translate3d(0, ${(shift * -0.08).toFixed(1)}px, 0)`;
+  };
+
+  /* Las fotos marcadas se corren despacio dentro de su marco. */
+  const updateParallax = () => {
+    const middle = window.innerHeight / 2;
+    parallaxItems.forEach((item) => {
+      const box = item.getBoundingClientRect();
+      if (box.bottom < -80 || box.top > window.innerHeight + 80) return;
+      const offset = clamp((box.top + box.height / 2 - middle) / window.innerHeight, -1, 1);
+      item.style.transform = `translate3d(0, ${(offset * -30).toFixed(1)}px, 0) scale(1.1)`;
+    });
+  };
+
+  /* --- Marquesina reactiva ------------------------------------------------- */
+
+  const marquee = document.querySelector("[data-marquee]");
+  const track = marquee?.querySelector(".marquee-track");
+  let marqueeOffset = 0;
+  let marqueeVisible = false;
+
+  if (marquee && track && !reduced) {
+    marquee.classList.add("is-driven");
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(
+        ([entry]) => {
+          marqueeVisible = entry.isIntersecting;
+        },
+        { rootMargin: "80px" },
+      ).observe(marquee);
     } else {
-      let queued = false;
-      const onScroll = () => {
-        if (queued) return;
-        queued = true;
-        window.requestAnimationFrame(() => {
-          queued = false;
-          update();
-        });
-      };
-      const onResize = () => {
-        path = null;
-        onScroll();
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onResize);
-      window.addEventListener("load", onResize);
-      update();
+      marqueeVisible = true;
     }
+  }
+
+  const updateMarquee = (delta) => {
+    if (!marqueeVisible) return;
+    const half = track.scrollWidth / 2;
+    if (half <= 0) return;
+    // Ritmo base hacia la izquierda, empujado por la velocidad del scroll.
+    marqueeOffset -= (34 + clamp(velocity * 1.6, -170, 170)) * delta;
+    if (marqueeOffset <= -half) marqueeOffset += half;
+    if (marqueeOffset > 0) marqueeOffset -= half;
+    track.style.transform = `translate3d(${marqueeOffset.toFixed(1)}px, 0, 0)`;
+  };
+
+  /* --- Bucle -------------------------------------------------------------- */
+
+  const pageProgress = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    return max > 0 ? clamp(scrollY / max, 0, 1) : 0;
+  };
+
+  let last = 0;
+  let running = false;
+  let settled = 0;
+
+  const frame = (now) => {
+    const delta = last ? Math.min(0.05, (now - last) / 1000) : 0.016;
+    last = now;
+
+    const previous = scrollY;
+    scrollY = window.scrollY;
+    velocity = velocity * 0.82 + (scrollY - previous) * 0.18;
+
+    // Con la página quieta sólo sigue viva la marquesina: evita medir layout
+    // en cada cuadro cuando no hay nada que actualizar.
+    const moving = settled < 2 || Math.abs(scrollY - previous) > 0.4 || Math.abs(velocity) > 0.05;
+    settled = moving ? 0 : settled + 1;
+
+    if (moving) {
+      if (header) header.classList.toggle("is-stuck", scrollY > 24);
+
+      if (companion) {
+        setCompanionState(currentZone());
+        companion.style.setProperty("--page", pageProgress().toFixed(4));
+        companion.style.setProperty("--tilt", `${clamp(velocity * 0.5, -16, 16).toFixed(1)}deg`);
+      }
+      if (journey && moments.length) updateJourney();
+      if (quote && quoteWords.length) updateQuote();
+      if (heroFrame && scrollY < window.innerHeight * 1.2) updateHero();
+      if (parallaxItems.length) updateParallax();
+    }
+    if (track) updateMarquee(delta);
+
+    if (running) window.requestAnimationFrame(frame);
+  };
+
+  const start = () => {
+    if (running) return;
+    running = true;
+    last = 0;
+    window.requestAnimationFrame(frame);
+  };
+  const stop = () => {
+    running = false;
+  };
+
+  if (reduced) {
+    // Sin movimiento: una sola pasada para dejar cada cosa en su estado final.
+    moments.forEach((m) => m.classList.add("is-active"));
+    if (companion) {
+      setCompanionState(currentZone());
+      companion.classList.add("is-awake");
+    }
+    window.addEventListener(
+      "scroll",
+      () => {
+        scrollY = window.scrollY;
+        if (header) header.classList.toggle("is-stuck", scrollY > 24);
+        if (companion) setCompanionState(currentZone());
+      },
+      { passive: true },
+    );
+  } else {
+    start();
+    document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+    window.addEventListener("resize", () => {
+      path = null;
+    });
+    window.addEventListener("load", () => {
+      path = null;
+    });
   }
 
   /* --- Slot de video (queda listo para cuando exista el material) --------- */
@@ -144,7 +299,7 @@
     video.preload = "metadata";
     video.setAttribute("aria-label", "Preparación de la Carrot Cake");
     mediaSlot.replaceChildren(video);
-    if (!motionQuery.matches) video.play().catch(() => {});
+    if (!reduced) video.play().catch(() => {});
   }
 
   /* --- Formulario de pedido ----------------------------------------------- */

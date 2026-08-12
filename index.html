@@ -24,6 +24,49 @@
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
+    <!-- Acompañante: baja con el scroll y va cambiando de estado según la
+         sección. Decorativo, por eso queda fuera del árbol de accesibilidad. -->
+    <div class="companion" data-companion aria-hidden="true">
+      <div class="companion-rail"><span class="companion-fill"></span></div>
+      <div class="companion-chip">
+        <svg class="companion-art is-on" data-state="carrot" viewBox="0 0 120 120">
+          <g transform="translate(18 1) scale(0.535)">
+            <path class="c-leaf" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
+            <path class="c-leaf" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
+            <path class="c-body" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
+            <path class="c-line" d="M55 103c15 4 31 3 45-4M48 132c16 5 33 3 48-5M44 160c14 4 27 3 40-5" />
+          </g>
+        </svg>
+        <svg class="companion-art" data-state="grated" viewBox="0 0 120 120">
+          <g transform="translate(30 2) scale(0.4)">
+            <path class="c-leaf" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
+            <path class="c-leaf" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
+            <path class="c-body" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
+          </g>
+          <path class="c-body" d="M16 100c7-8 17-11 25-8-7 8-17 11-25 8Z" />
+          <path class="c-body" d="M50 108c7-6 16-8 23-5-7 6-16 8-23 5Z" />
+          <path class="c-body" d="M84 101c6-6 14-7 20-4-6 6-14 7-20 4Z" />
+        </svg>
+        <svg class="companion-art" data-state="cake" viewBox="0 0 120 120">
+          <g transform="translate(0 -4)">
+            <path class="c-crumb" d="M24 60h72v26a10 10 0 0 1-10 10H34a10 10 0 0 1-10-10Z" />
+            <path class="c-frost" d="M60 34c20 0 36 6 36 13v9c0 6-16 10-36 10s-36-4-36-10v-9c0-7 16-13 36-13Z" />
+            <circle class="c-nut" cx="44" cy="40" r="4.6" />
+            <circle class="c-nut" cx="60" cy="37" r="4.6" />
+            <circle class="c-nut" cx="76" cy="40" r="4.6" />
+          </g>
+        </svg>
+        <svg class="companion-art" data-state="box" viewBox="0 0 120 120">
+          <g transform="translate(0 -2)">
+            <path class="c-crumb" d="M24 58h72v32a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6Z" />
+            <path class="c-body" d="M20 44h80a5 5 0 0 1 5 5v9H15v-9a5 5 0 0 1 5-5Z" />
+            <path class="c-frost" d="M54 44h12v52H54Z" />
+            <path class="c-frost" d="M60 44c-7-11-17-13-21-7-3 6 4 9 21 7Zm0 0c7-11 17-13 21-7 3 6-4 9-21 7Z" />
+          </g>
+        </svg>
+      </div>
+    </div>
+
     <header class="site-header" data-header>
       <a class="brand" href="#inicio" aria-label="Carrot Dream, ir al inicio">
         <img src="assets/img/logo-horizontal.webp" alt="Carrot Dream" width="760" height="215" />
@@ -38,7 +81,7 @@
 
     <main id="contenido">
       <!-- ── Hero ─────────────────────────────────────────────── -->
-      <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <section class="hero" id="inicio" data-companion-state="carrot" aria-labelledby="hero-title">
         <div class="hero-inner">
           <div class="hero-copy" data-reveal>
             <p class="kicker">Repostería artesanal · Buenos Aires</p>
@@ -60,7 +103,6 @@
                 fetchpriority="high"
               />
             </figure>
-            <img class="hero-seal" src="assets/img/mark.webp" width="512" height="519" alt="" aria-hidden="true" />
           </div>
         </div>
 
@@ -80,7 +122,7 @@
         </ul>
       </section>
 
-      <div class="marquee" aria-hidden="true">
+      <div class="marquee" data-marquee aria-hidden="true">
         <div class="marquee-track">
           <span>Dulzura en cada bocado</span><b></b><span>Carrot Cake artesanal</span><b></b><span>Hecha desde la raíz</span><b></b>
           <span>Dulzura en cada bocado</span><b></b><span>Carrot Cake artesanal</span><b></b><span>Hecha desde la raíz</span><b></b>
@@ -88,7 +130,7 @@
       </div>
 
       <!-- ── La receta ────────────────────────────────────────── -->
-      <section class="recipe" id="receta" aria-labelledby="recipe-title">
+      <section class="recipe" id="receta" data-companion-state="grated" aria-labelledby="recipe-title">
         <div class="recipe-head" data-reveal>
           <p class="kicker kicker-dark">La receta</p>
           <h2 id="recipe-title">Todo lo que queremos<br />en <i>una torta.</i></h2>
@@ -123,7 +165,7 @@
       </section>
 
       <!-- ── Recorrido con scroll ─────────────────────────────── -->
-      <section class="journey" id="recorrido" data-journey aria-labelledby="journey-title">
+      <section class="journey" id="recorrido" data-companion-state="none" data-journey aria-labelledby="journey-title">
         <div class="journey-scene">
           <div class="journey-head">
             <p class="kicker">El recorrido</p>
@@ -192,7 +234,7 @@
       </section>
 
       <!-- ── Textura / video ──────────────────────────────────── -->
-      <section class="texture" aria-labelledby="texture-title">
+      <section class="texture" data-companion-state="cake" aria-labelledby="texture-title">
         <div class="texture-copy" data-reveal>
           <p class="kicker kicker-dark">La textura</p>
           <h2 id="texture-title">Suave por dentro.<br /><i>Inolvidable</i> afuera.</h2>
@@ -205,12 +247,12 @@
           </p>
         </div>
         <figure class="frame frame-wide" data-video-src="" data-poster="assets/img/cake-wide.jpg" data-reveal>
-          <img src="assets/img/cake-wide.jpg" width="1398" height="894" alt="La Carrot Cake completa sobre una mesa de madera con un lienzo de lino" loading="lazy" />
+          <img data-parallax src="assets/img/cake-wide.jpg" width="1398" height="894" alt="La Carrot Cake completa sobre una mesa de madera con un lienzo de lino" loading="lazy" />
         </figure>
       </section>
 
       <!-- ── Origen ───────────────────────────────────────────── -->
-      <section class="origin" id="origen" aria-labelledby="origin-title">
+      <section class="origin" id="origen" data-companion-state="cake" aria-labelledby="origin-title">
         <div class="origin-head" data-reveal>
           <p class="kicker kicker-light">El origen</p>
           <h2 id="origin-title">Todo empezó con una restricción<br />y mucha <i>curiosidad.</i></h2>
@@ -235,11 +277,11 @@
           </li>
         </ol>
 
-        <p class="origin-quote" data-reveal>Una limitación se convirtió en identidad.</p>
+        <p class="origin-quote" data-scrub data-reveal><span>Una</span> <span>limitación</span> <span>se</span> <span>convirtió</span> <span>en</span> <span>identidad.</span></p>
       </section>
 
       <!-- ── Pedido ───────────────────────────────────────────── -->
-      <section class="order" id="pedido" aria-labelledby="order-title">
+      <section class="order" id="pedido" data-companion-state="box" aria-labelledby="order-title">
         <div class="order-head" data-reveal>
           <p class="kicker kicker-dark">Pedidos</p>
           <h2 id="order-title">Tu próximo<br /><i>momento dulce.</i></h2>
@@ -336,7 +378,7 @@
       </section>
     </main>
 
-    <footer class="site-footer">
+    <footer class="site-footer" data-companion-state="box">
       <div class="footer-top">
         <div class="footer-brand">
           <img src="assets/img/logo-horizontal.webp" width="760" height="215" alt="Carrot Dream" loading="lazy" />
