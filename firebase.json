@@ -12,14 +12,23 @@
       "**/*.md"
     ],
     "cleanUrls": true,
+    "_comment": "El HTML, el CSS y el JS revalidan en cada visita: los nombres de archivo no llevan hash, así que cachearlos deja al visitante con HTML nuevo y estilos viejos. Las imágenes sí se cachean, porque su contenido no cambia.",
     "headers": [
+      {
+        "source": "/",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      },
+      {
+        "source": "**/*.html",
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+      },
       {
         "source": "**/*.@(jpg|jpeg|webp|png|ico|svg)",
         "headers": [{ "key": "Cache-Control", "value": "public, max-age=604800" }]
       },
       {
         "source": "**/*.@(css|js)",
-        "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }]
+        "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
       }
     ]
   }
