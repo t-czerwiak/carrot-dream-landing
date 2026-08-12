@@ -176,57 +176,64 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
 
 /* --- Acompañante de scroll ------------------------------------------------ */
 
-/* Mientras el acompañante viaja por el costado, la caja de contenido se angosta
-   lo justo para que nunca le pase por encima a un renglón. Arriba de 1440px la
-   medida no cambia. */
+/* La caja de contenido se angosta lo justo para que el acompañante, fijo en la
+   esquina, nunca le pase por encima a un renglón mientras la página pasa por
+   abajo. Arriba de 1480px la medida no cambia. */
 @media (min-width: 901px) {
   :root { --shell: min(1240px, calc(100vw - 240px)); }
 }
 
-/* Baja por el borde derecho junto con la página y cambia de estado según la
-   sección: zanahoria entera, rallada, torta y caja de pedido. */
+/* Va fijo en la esquina inferior derecha y cambia de estado según la sección:
+   zanahoria entera, rallada, torta y caja de pedido. Queda siempre en el mismo
+   lugar a propósito: un elemento que viajaba terminaba cayendo justo sobre la
+   costura entre dos secciones y se leía como un error. */
 .companion {
   --page: 0;
   position: fixed;
-  top: 0;
-  right: clamp(10px, 1.8vw, 30px);
+  right: clamp(16px, 2vw, 30px);
+  bottom: clamp(18px, 3vh, 30px);
   z-index: 40;
-  width: clamp(54px, 5.6vw, 76px);
-  height: 100dvh;
+  width: 68px;
+  height: 68px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 500ms var(--ease);
+  transform: translateY(12px);
+  transition: opacity 420ms var(--ease), transform 420ms var(--ease);
 }
-.companion.is-awake { opacity: 1; }
+.companion.is-awake { opacity: 1; transform: none; }
 
-.companion-rail {
-  position: absolute;
-  top: 22vh;
-  bottom: 22vh;
-  left: 50%;
-  width: 2px;
-  margin-left: -1px;
-  background: rgba(139, 90, 43, 0.42);
-}
-.companion-fill {
+/* Aro de progreso. Es lo único que no se anima con transform ni opacity: es un
+   trazo sobre un elemento de 68px, así que no cuesta nada. */
+.companion-ring {
   position: absolute;
   inset: 0;
-  background: var(--orange);
-  transform: scaleY(var(--page));
-  transform-origin: top center;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
 }
+.ring-bg,
+.ring-fg {
+  fill: none;
+  stroke-width: 3;
+}
+.ring-bg { stroke: rgba(139, 90, 43, 0.38); }
+.ring-fg {
+  stroke: var(--orange);
+  stroke-linecap: round;
+  stroke-dasharray: 289;
+  stroke-dashoffset: calc(289 - 289 * var(--page));
+}
+
+.companion-rail { display: none; }
 
 .companion-chip {
   position: absolute;
-  top: calc(22vh + var(--page) * 56vh);
-  left: 50%;
+  inset: 7px;
   display: grid;
-  width: clamp(54px, 5.6vw, 76px);
-  aspect-ratio: 1;
   background: var(--ink);
-  border: 1.5px solid rgba(242, 140, 40, 0.42);
   border-radius: 50%;
-  transform: translate(-50%, -50%) rotate(var(--tilt, 0deg));
+  box-shadow: 0 6px 20px rgba(26, 16, 8, 0.28);
+  transform: rotate(var(--tilt, 0deg));
   transition: transform 260ms var(--ease);
 }
 .companion-art {
@@ -450,6 +457,7 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
 .journey-scene {
   position: sticky;
   top: 0;
+  opacity: var(--exit, 1);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   height: 100dvh;
@@ -923,7 +931,6 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   /* En pantallas chicas el acompañante pasa a una barra inferior: sigue
      cambiando de estado y muestra el avance, sin taparle texto a nadie. */
   .companion {
-    top: auto;
     right: 0;
     bottom: 0;
     left: 0;
@@ -936,22 +943,28 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
     background: rgba(26, 16, 8, 0.94);
     border-top: 1px solid rgba(255, 244, 230, 0.14);
   }
+  .companion-ring { display: none; }
   .companion-rail {
+    display: block;
     position: relative;
-    inset: auto;
     flex: 1;
-    width: auto;
     height: 2px;
-    margin: 0;
     background: rgba(255, 244, 230, 0.2);
   }
-  .companion-fill { transform: scaleX(var(--page)); transform-origin: left center; }
+  .companion-fill {
+    position: absolute;
+    inset: 0;
+    background: var(--orange);
+    transform: scaleX(var(--page));
+    transform-origin: left center;
+  }
   .companion-chip {
     position: relative;
-    top: auto;
-    left: auto;
+    inset: auto;
     flex: none;
     width: 40px;
+    height: 40px;
+    box-shadow: none;
     transform: rotate(var(--tilt, 0deg));
   }
   .site-footer { padding-bottom: 84px; }
@@ -1014,9 +1027,9 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   [data-reveal] { opacity: 1; transform: none; }
   .origin-quote.is-scrubbing span { opacity: 1; }
 
-  /* El acompañante deja de viajar: queda fijo y sólo cambia de estado. */
-  .companion-rail { display: none; }
-  .companion-chip { top: auto; bottom: 26px; transform: translate(-50%, 0); }
+  /* El acompañante ya está fijo: sólo se apaga el aro de progreso. */
+  .companion-ring { display: none; }
+  .companion-chip { transform: none; }
 
   /* El recorrido pasa a ser una composición estática con los tres momentos */
   .journey { height: auto; }

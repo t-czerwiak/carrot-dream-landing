@@ -19,7 +19,7 @@
       rel="stylesheet"
     />
     <link rel="preload" as="image" href="assets/img/cake-hero.jpg" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=2" />
   </head>
   <body>
     <a class="skip-link" href="#contenido">Saltar al contenido</a>
@@ -27,41 +27,45 @@
     <!-- Acompañante: baja con el scroll y va cambiando de estado según la
          sección. Decorativo, por eso queda fuera del árbol de accesibilidad. -->
     <div class="companion" data-companion aria-hidden="true">
+      <svg class="companion-ring" viewBox="0 0 100 100">
+        <circle class="ring-bg" cx="50" cy="50" r="46" />
+        <circle class="ring-fg" cx="50" cy="50" r="46" />
+      </svg>
       <div class="companion-rail"><span class="companion-fill"></span></div>
       <div class="companion-chip">
-        <svg class="companion-art is-on" data-state="carrot" viewBox="0 0 120 120">
+        <svg class="companion-art is-on" data-state="carrot" viewBox="0 0 120 120" width="44" height="44">
           <g transform="translate(18 1) scale(0.535)">
-            <path class="c-leaf" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
-            <path class="c-leaf" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
-            <path class="c-body" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
-            <path class="c-line" d="M55 103c15 4 31 3 45-4M48 132c16 5 33 3 48-5M44 160c14 4 27 3 40-5" />
+            <path class="c-leaf" fill="#7ea52c" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
+            <path class="c-leaf" fill="#7ea52c" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
+            <path class="c-body" fill="#f28c28" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
+            <path class="c-line" fill="none" d="M55 103c15 4 31 3 45-4M48 132c16 5 33 3 48-5M44 160c14 4 27 3 40-5" />
           </g>
         </svg>
-        <svg class="companion-art" data-state="grated" viewBox="0 0 120 120">
+        <svg class="companion-art" data-state="grated" viewBox="0 0 120 120" width="44" height="44">
           <g transform="translate(30 2) scale(0.4)">
-            <path class="c-leaf" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
-            <path class="c-leaf" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
-            <path class="c-body" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
+            <path class="c-leaf" fill="#7ea52c" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
+            <path class="c-leaf" fill="#7ea52c" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
+            <path class="c-body" fill="#f28c28" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
           </g>
-          <path class="c-body" d="M16 100c7-8 17-11 25-8-7 8-17 11-25 8Z" />
-          <path class="c-body" d="M50 108c7-6 16-8 23-5-7 6-16 8-23 5Z" />
-          <path class="c-body" d="M84 101c6-6 14-7 20-4-6 6-14 7-20 4Z" />
+          <path class="c-body" fill="#f28c28" d="M16 100c7-8 17-11 25-8-7 8-17 11-25 8Z" />
+          <path class="c-body" fill="#f28c28" d="M50 108c7-6 16-8 23-5-7 6-16 8-23 5Z" />
+          <path class="c-body" fill="#f28c28" d="M84 101c6-6 14-7 20-4-6 6-14 7-20 4Z" />
         </svg>
-        <svg class="companion-art" data-state="cake" viewBox="0 0 120 120">
+        <svg class="companion-art" data-state="cake" viewBox="0 0 120 120" width="44" height="44">
           <g transform="translate(0 -4)">
-            <path class="c-crumb" d="M24 60h72v26a10 10 0 0 1-10 10H34a10 10 0 0 1-10-10Z" />
-            <path class="c-frost" d="M60 34c20 0 36 6 36 13v9c0 6-16 10-36 10s-36-4-36-10v-9c0-7 16-13 36-13Z" />
-            <circle class="c-nut" cx="44" cy="40" r="4.6" />
-            <circle class="c-nut" cx="60" cy="37" r="4.6" />
-            <circle class="c-nut" cx="76" cy="40" r="4.6" />
+            <path class="c-crumb" fill="#a9682f" d="M24 60h72v26a10 10 0 0 1-10 10H34a10 10 0 0 1-10-10Z" />
+            <path class="c-frost" fill="#fff4e6" d="M60 34c20 0 36 6 36 13v9c0 6-16 10-36 10s-36-4-36-10v-9c0-7 16-13 36-13Z" />
+            <circle class="c-nut" fill="#8b5a2b" cx="44" cy="40" r="4.6" />
+            <circle class="c-nut" fill="#8b5a2b" cx="60" cy="37" r="4.6" />
+            <circle class="c-nut" fill="#8b5a2b" cx="76" cy="40" r="4.6" />
           </g>
         </svg>
-        <svg class="companion-art" data-state="box" viewBox="0 0 120 120">
+        <svg class="companion-art" data-state="box" viewBox="0 0 120 120" width="44" height="44">
           <g transform="translate(0 -2)">
-            <path class="c-crumb" d="M24 58h72v32a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6Z" />
-            <path class="c-body" d="M20 44h80a5 5 0 0 1 5 5v9H15v-9a5 5 0 0 1 5-5Z" />
-            <path class="c-frost" d="M54 44h12v52H54Z" />
-            <path class="c-frost" d="M60 44c-7-11-17-13-21-7-3 6 4 9 21 7Zm0 0c7-11 17-13 21-7 3 6-4 9-21 7Z" />
+            <path class="c-crumb" fill="#a9682f" d="M24 58h72v32a6 6 0 0 1-6 6H30a6 6 0 0 1-6-6Z" />
+            <path class="c-body" fill="#f28c28" d="M20 44h80a5 5 0 0 1 5 5v9H15v-9a5 5 0 0 1 5-5Z" />
+            <path class="c-frost" fill="#fff4e6" d="M54 44h12v52H54Z" />
+            <path class="c-frost" fill="#fff4e6" d="M60 44c-7-11-17-13-21-7-3 6 4 9 21 7Zm0 0c7-11 17-13 21-7 3 6-4 9-21 7Z" />
           </g>
         </svg>
       </div>
@@ -212,11 +216,11 @@
             </div>
 
             <div class="journey-orbit" aria-hidden="true">
-              <svg class="orbit-carrot" viewBox="0 0 150 224" role="presentation">
-                <path class="carrot-leaf" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
-                <path class="carrot-leaf" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
-                <path class="carrot-body" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
-                <path class="carrot-line" d="M55 103c15 4 31 3 45-4M48 132c16 5 33 3 48-5M44 160c14 4 27 3 40-5" />
+              <svg class="orbit-carrot" viewBox="0 0 150 224" width="56" height="84" role="presentation">
+                <path class="carrot-leaf" fill="#6b8e23" d="M73 60C43 43 32 20 37 3c22 9 33 26 38 49Z" />
+                <path class="carrot-leaf" fill="#6b8e23" d="M81 60c15-29 36-42 57-39-3 23-22 39-51 47Z" />
+                <path class="carrot-body" fill="#f28c28" d="M76 53c26 18 38 45 30 76-8 33-30 64-57 87-19-30-24-63-14-96 10-32 24-54 41-67Z" />
+                <path class="carrot-line" fill="none" d="M55 103c15 4 31 3 45-4M48 132c16 5 33 3 48-5M44 160c14 4 27 3 40-5" />
               </svg>
             </div>
 
@@ -405,6 +409,6 @@
       </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=2"></script>
   </body>
 </html>

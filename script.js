@@ -115,6 +115,8 @@
     const progress = clamp(-box.top / range, 0, 1);
 
     journey.style.setProperty("--p", progress.toFixed(4));
+    // La escena se apaga al salir, en vez de meterse cortada bajo el header.
+    journey.style.setProperty("--exit", ramp(box.bottom, window.innerHeight * 0.34, window.innerHeight * 0.9).toFixed(3));
     // Las migas aparecen recién sobre el final del recorrido.
     journey.style.setProperty("--crumbs", clamp((progress - 0.78) / 0.14, 0, 1).toFixed(3));
     setMoment(Math.min(moments.length - 1, Math.floor(progress * moments.length)));
