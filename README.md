@@ -93,6 +93,20 @@ mantienen los fundidos de opacidad, que no son un problema vestibular, así que
 la página sigue teniendo vida sin movimiento. Vale saberlo al revisar el sitio:
 si en tu equipo está activado, vas a ver esa versión y no la animada.
 
+## Desplegables
+
+El detalle operativo va plegado detrás de un título con flecha, para que la
+página no sea sólo scrollear: "Cómo llegamos a la receta" en el origen, y "Cómo
+pedir" y "Disponibilidad y entrega" en el pedido.
+
+Lo que vende no se pliega: hero, receta, recorrido, textura, precios y
+formulario quedan siempre a la vista. Plegar contenido es esconderlo, y a un
+bloque cerrado casi nadie lo abre.
+
+Para agregar uno nuevo alcanza con copiar la estructura `.fold` de
+`index.html`; `script.js` engancha cualquier bloque con `data-fold`. Con
+`data-fold-open` arranca abierto. Sin JS quedan todos abiertos.
+
 ## Cupón
 
 Al final del recorrido, en la sección de pedido, aparece un cupón canjeable: al

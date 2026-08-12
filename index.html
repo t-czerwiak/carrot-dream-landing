@@ -24,6 +24,8 @@
       <style>
         /* Sin JS no hay quien dispare el revelado: se muestra todo. */
         [data-reveal] { opacity: 1 !important; transform: none !important; }
+        .fold-panel { grid-template-rows: 1fr !important; visibility: visible !important; }
+        .fold-arrow { display: none; }
         .companion { display: none; }
       </style>
     </noscript>
@@ -269,7 +271,17 @@
           <h2 id="origin-title">Todo empezó con una restricción<br />y mucha <i>curiosidad.</i></h2>
         </div>
 
-        <ol class="origin-steps" data-reveal>
+        <div class="origin-fold" data-reveal>
+        <div class="fold" data-fold>
+          <h3 class="fold-title">
+            <button class="fold-head" type="button" aria-expanded="false" aria-controls="fold-origen">
+              <span class="fold-label">Cómo llegamos a la receta<em>Cuatro pasos</em></span>
+              <i class="fold-arrow" aria-hidden="true"></i>
+            </button>
+          </h3>
+          <div class="fold-panel" id="fold-origen" role="region">
+            <div class="fold-clip"><div class="fold-inner">
+        <ol class="origin-steps">
           <li>
             <h3>La restricción</h3>
             <p>Alguien de la familia no podía comer huevo y igual quería una torta de cumpleaños.</p>
@@ -287,6 +299,10 @@
             <p>Lo que empezó como una solución casera terminó siendo una torta con nombre propio.</p>
           </li>
         </ol>
+            </div></div>
+          </div>
+        </div>
+        </div>
 
         <p class="origin-quote" data-scrub data-reveal><span>Una</span> <span>limitación</span> <span>se</span> <span>convirtió</span> <span>en</span> <span>identidad.</span></p>
       </section>
@@ -347,7 +363,15 @@
         </div>
 
         <div class="how" data-reveal>
-          <h3 class="how-title">Cómo pedir</h3>
+        <div class="fold" data-fold>
+          <h3 class="fold-title">
+            <button class="fold-head" type="button" aria-expanded="false" aria-controls="fold-pasos">
+              <span class="fold-label">Cómo pedir<em>Tres pasos</em></span>
+              <i class="fold-arrow" aria-hidden="true"></i>
+            </button>
+          </h3>
+          <div class="fold-panel" id="fold-pasos" role="region">
+            <div class="fold-clip"><div class="fold-inner">
           <ol class="how-steps">
             <li>
               <h4>Escribinos</h4>
@@ -362,6 +386,18 @@
               <p>Recién hecha, fría y en su caja. También la llevamos a domicilio.</p>
             </li>
           </ol>
+            </div></div>
+          </div>
+        </div>
+        <div class="fold" data-fold>
+          <h3 class="fold-title">
+            <button class="fold-head" type="button" aria-expanded="false" aria-controls="fold-entrega">
+              <span class="fold-label">Disponibilidad y entrega<em>Fechas, retiro y envío</em></span>
+              <i class="fold-arrow" aria-hidden="true"></i>
+            </button>
+          </h3>
+          <div class="fold-panel" id="fold-entrega" role="region">
+            <div class="fold-clip"><div class="fold-inner">
           <dl class="availability">
             <div>
               <dt>Anticipación</dt>
@@ -376,6 +412,9 @@
               <dd>Retiro en Palermo o envío</dd>
             </div>
           </dl>
+            </div></div>
+          </div>
+        </div>
         </div>
 
         <form class="order-form" data-order-form data-reveal>

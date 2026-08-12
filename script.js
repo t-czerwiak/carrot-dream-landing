@@ -318,6 +318,21 @@
     if (!reduced) video.play().catch(() => {});
   }
 
+  /* --- Desplegables -------------------------------------------------------
+     Sólo el detalle operativo va plegado. Agregale data-fold-open a un bloque
+     de index.html si querés que arranque abierto. */
+
+  document.querySelectorAll("[data-fold]").forEach((fold) => {
+    const head = fold.querySelector(".fold-head");
+    if (!head) return;
+    const setOpen = (open) => {
+      fold.classList.toggle("is-open", open);
+      head.setAttribute("aria-expanded", String(open));
+    };
+    setOpen(fold.hasAttribute("data-fold-open"));
+    head.addEventListener("click", () => setOpen(!fold.classList.contains("is-open")));
+  });
+
   /* --- Cupón --------------------------------------------------------------
      El descuento y el código son de demostración: cambialos acá y en el texto
      del cupón en index.html, o borrá el bloque entero si no va. */

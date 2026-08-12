@@ -713,8 +713,9 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   background: var(--leaf-deep);
 }
 .origin-head,
-.origin-steps,
+.origin-fold,
 .origin-quote { max-width: var(--shell); margin: 0 auto; }
+.origin-fold { margin-bottom: clamp(48px, 8vh, 86px); color: var(--cream); }
 
 .origin-head { margin-bottom: clamp(48px, 7vh, 78px); }
 .origin-head h2 { font-size: clamp(34px, 4.2vw, 58px); line-height: 1.08; }
@@ -724,7 +725,6 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(24px, 3vw, 46px);
-  margin-bottom: clamp(56px, 9vh, 98px);
 }
 .origin-steps li { padding-top: 22px; border-top: 1px solid rgba(255, 244, 230, 0.34); }
 .origin-steps h3 { margin-bottom: 10px; font-size: clamp(21px, 1.9vw, 26px); }
@@ -884,18 +884,96 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
   pointer-events: none;
 }
 
-/* Cómo pedir + disponibilidad */
-.how {
-  padding: clamp(34px, 5vh, 56px) 0;
-  border-block: 1px solid var(--line-light);
-  margin-bottom: clamp(56px, 8vh, 88px);
+/* --- Desplegables ---------------------------------------------------------
+   Para el detalle operativo: se ve el título, el contenido se abre al tocar.
+   El truco de grid-template-rows 0fr → 1fr anima el alto sin conocerlo, y la
+   visibilidad se apaga recién al terminar para que el lector de pantalla no
+   lea lo que está cerrado. */
+
+.fold { border-top: 1px solid currentColor; }
+.fold:last-child { border-bottom: 1px solid currentColor; }
+.fold-title { margin: 0; }
+
+.fold-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: clamp(20px, 2.6vh, 28px) 0;
+  color: inherit;
+  text-align: left;
+  background: none;
+  border: 0;
 }
-.how-title { margin-bottom: 34px; font-size: clamp(26px, 2.6vw, 34px); }
+.fold-label {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  font-family: var(--serif);
+  font-size: clamp(21px, 2.1vw, 28px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.fold-label em {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  opacity: 0.6;
+}
+
+.fold-arrow {
+  position: relative;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: transform 340ms var(--ease), opacity 220ms var(--ease), background-color 220ms var(--ease);
+}
+.fold-arrow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 9px;
+  height: 9px;
+  margin: auto;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+}
+.fold-head:hover .fold-arrow { opacity: 1; background: rgba(242, 140, 40, 0.16); }
+.fold.is-open .fold-arrow { transform: rotate(180deg); opacity: 1; }
+
+.fold-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 400ms var(--ease), visibility 0s linear 400ms;
+}
+.fold.is-open .fold-panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition: grid-template-rows 400ms var(--ease), visibility 0s;
+}
+.fold-clip { overflow: hidden; }
+.fold-inner { padding-bottom: clamp(24px, 3.4vh, 38px); }
+
+/* En el bloque verde el borde a currentColor queda demasiado fuerte. */
+.origin-fold .fold { border-color: rgba(255, 244, 230, 0.32); }
+.origin-fold .fold-arrow { border-color: rgba(255, 244, 230, 0.75); }
+.how .fold { border-color: var(--line-light); }
+.how .fold-arrow { border-color: rgba(26, 16, 8, 0.42); }
+
+/* Cómo pedir + disponibilidad */
+.how { margin-bottom: clamp(56px, 8vh, 88px); }
 .how-steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(24px, 3vw, 56px);
-  margin-bottom: clamp(34px, 5vh, 52px);
   counter-reset: paso;
 }
 .how-steps li { position: relative; padding-left: 44px; counter-increment: paso; }
