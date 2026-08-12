@@ -76,6 +76,19 @@ para esta maqueta. Antes de publicar hay que reemplazarlos:
 | Precios y tamaños | sección `.sizes` de `index.html` |
 | Instagram, email, dirección y horarios | `footer` de `index.html` |
 
+## Deploy
+
+El sitio está publicado en Firebase Hosting:
+<https://carrot-dream-landing.web.app>
+
+```bash
+firebase deploy --only hosting
+```
+
+`firebase.json` publica la raíz del repo pero deja afuera el brand kit,
+`outputs/`, `work/`, `tools/` y los `.md`: al hosting sólo suben el HTML, el
+CSS, el JS y `assets/img/`.
+
 ## Entregable
 
 `outputs/carrot-dream-landing/` es una copia del sitio lista para entregar. Si
