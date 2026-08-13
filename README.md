@@ -17,8 +17,10 @@ index.html              marcado de la landing
 styles.css              estilos (paleta y tipografías del manual de marca)
 script.js               revelados, recorrido con scroll y formulario
 assets/brand-kit/       las páginas del manual, tal como fueron entregadas
+assets/photos/          fotos propias, fuera del manual
 assets/img/             imágenes derivadas que usa la landing
-tools/build-assets.py   script que genera assets/img/ desde el brand kit
+tools/build-assets.py   genera assets/img/ desde el brand kit y las fotos
+tools/check-styles.py   avisa si alguna clase del HTML se quedó sin estilos
 ```
 
 ## Imágenes
@@ -39,7 +41,11 @@ python tools/build-assets.py   # requiere Pillow y numpy
 
 Detalles a tener en cuenta si se regeneran:
 
-- **En todo el kit hay una sola fotografía de la torta.** Para que no se repita
+- **En todo el kit hay una sola fotografía de la torta.** La porción cortada de
+  la sección de textura viene aparte, en `assets/photos/carrot-cake-slice.jpg`.
+  Ojo con esa: el nombre de archivo original (`360_F_...`) es el de una vista
+  previa de Adobe Stock, así que **antes de publicar en serio hay que licenciarla
+  o reemplazarla** por una foto propia. Para que no se repita
   la misma imagen en cada bloque, `build-assets.py` saca cinco encuadres
   distintos de esa toma: el hero en vertical, la escena completa, el círculo del
   recorrido y dos primeros planos para las tarjetas de tamaño. Si algún día hay

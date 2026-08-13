@@ -87,12 +87,16 @@ def main():
     photo = portada["image0_10_2"].convert("RGB")  # 1024x559, la torta completa
     # El destello de marca vive en (971..999, 503..531): todos los recortes lo evitan.
     save_photo(upscale(photo.crop((500, 0, 947, 559)), 2.0), "cake-hero.jpg", 894)
-    save_photo(upscale(photo.crop((90, 0, 964, 559)), 1.6), "cake-wide.jpg", 1398)
     save_photo(upscale(photo.crop((540, 40, 980, 480)), 1.8), "cake-round.jpg", 792)
     # Recortes cerrados: hay una sola fotografía de la torta en el kit, así que
     # cada lugar de la landing usa un encuadre distinto de la misma toma.
     save_photo(upscale(photo.crop((560, 55, 900, 395)), 2.0), "cake-nuts.jpg", 680)
     save_photo(upscale(photo.crop((620, 190, 960, 530)), 2.0), "cake-crumb.jpg", 680)
+
+    print("assets/photos → fotos propias")
+    # Foto aportada por el cliente, fuera del kit de marca.
+    slice_photo = Image.open(ROOT / "assets" / "photos" / "carrot-cake-slice.jpg")
+    save_photo(upscale(slice_photo.crop((150, 0, 690, 360)), 1.9), "cake-slice.jpg", 1026)
 
     print("Origen Marca.svg → ingredientes")
     origen = embedded("Origen Marca.svg")
