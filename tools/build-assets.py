@@ -89,6 +89,10 @@ def main():
     save_photo(upscale(photo.crop((500, 0, 947, 559)), 2.0), "cake-hero.jpg", 894)
     save_photo(upscale(photo.crop((90, 0, 964, 559)), 1.6), "cake-wide.jpg", 1398)
     save_photo(upscale(photo.crop((540, 40, 980, 480)), 1.8), "cake-round.jpg", 792)
+    # Recortes cerrados: hay una sola fotografía de la torta en el kit, así que
+    # cada lugar de la landing usa un encuadre distinto de la misma toma.
+    save_photo(upscale(photo.crop((560, 55, 900, 395)), 2.0), "cake-nuts.jpg", 680)
+    save_photo(upscale(photo.crop((620, 190, 960, 530)), 2.0), "cake-crumb.jpg", 680)
 
     print("Origen Marca.svg → ingredientes")
     origen = embedded("Origen Marca.svg")

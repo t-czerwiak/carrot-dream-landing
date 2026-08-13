@@ -39,8 +39,12 @@ python tools/build-assets.py   # requiere Pillow y numpy
 
 Detalles a tener en cuenta si se regeneran:
 
-- La foto de producto sale de `Portada.svg` y se recorta siempre evitando el
-  destello de marca de la esquina inferior derecha.
+- **En todo el kit hay una sola fotografía de la torta.** Para que no se repita
+  la misma imagen en cada bloque, `build-assets.py` saca cinco encuadres
+  distintos de esa toma: el hero en vertical, la escena completa, el círculo del
+  recorrido y dos primeros planos para las tarjetas de tamaño. Si algún día hay
+  fotos reales nuevas, reemplazan a estos recortes sin tocar nada más.
+- Todos los recortes evitan el destello de marca de la esquina inferior derecha.
 - El recorte del frosting (`Origen Marca.svg`) traía la marca de agua del banco
   de imágenes en los píxeles semitransparentes; el script la elimina con un
   umbral de alfa.
@@ -106,6 +110,13 @@ bloque cerrado casi nadie lo abre.
 Para agregar uno nuevo alcanza con copiar la estructura `.fold` de
 `index.html`; `script.js` engancha cualquier bloque con `data-fold`. Con
 `data-fold-open` arranca abierto. Sin JS quedan todos abiertos.
+
+## Elegir el tamaño
+
+Las dos tarjetas de tamaño son un grupo de radios: se elige ahí y el formulario
+lo refleja en la línea "Tu torta". El estado elegido lo resuelve `:has(:checked)`
+en CSS, así que se ve bien aunque el JS no cargue; el JS sólo agrega poder tocar
+la tarjeta entera y mantener el resumen sincronizado.
 
 ## Cupón
 

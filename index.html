@@ -334,31 +334,43 @@
           <button class="button button-primary" type="button" data-coupon-use>Usar el cupón</button>
         </div>
 
-        <!-- Los dos discos están dibujados a escala real entre sí (20 y 24 cm) y
-             apoyados sobre la misma línea, para que la diferencia se vea sola. -->
-        <div class="sizes" data-reveal>
+        <!-- Cada tarjeta es un radio: se elige acá y el formulario lo toma.
+             Los discos van a escala real entre sí (20 y 24 cm). -->
+        <div class="sizes" role="radiogroup" aria-label="Tamaño de la torta" data-reveal>
           <article class="size">
-            <div class="size-photo" aria-hidden="true">
-              <span style="--d: 132px"><img src="assets/img/cake-round.jpg" width="792" height="792" alt="" loading="lazy" /></span>
-            </div>
+            <input class="size-radio" type="radio" name="tamano" id="tam-clasica"
+                   value="Carrot Cake Clásica — 20 cm / 10 porciones" checked />
+            <span class="size-photo" aria-hidden="true">
+              <span style="--d: 132px"><img src="assets/img/cake-nuts.jpg" width="680" height="680" alt="" loading="lazy" /></span>
+              <i class="size-check"></i>
+            </span>
             <h3>Clásica</h3>
             <p class="size-dim">20 cm de diámetro</p>
             <p class="size-count"><strong>10</strong> porciones</p>
             <p class="size-desc">Para una mesa de seis a diez. El tamaño de un plato de postre grande.</p>
             <p class="price"><span class="cur">$</span>38.400 <span class="cur">ARS</span></p>
-            <button class="button button-primary" type="button" data-pick="0">Elegir la Clásica</button>
+            <label class="size-pick" for="tam-clasica">
+              <span class="pick-off">Elegir la Clásica</span>
+              <span class="pick-on">Elegida</span>
+            </label>
           </article>
 
           <article class="size">
-            <div class="size-photo" aria-hidden="true">
-              <span style="--d: 158px"><img src="assets/img/cake-round.jpg" width="792" height="792" alt="" loading="lazy" /></span>
-            </div>
+            <input class="size-radio" type="radio" name="tamano" id="tam-celebracion"
+                   value="Carrot Cake Celebración — 24 cm / 16 porciones" />
+            <span class="size-photo" aria-hidden="true">
+              <span style="--d: 158px"><img src="assets/img/cake-crumb.jpg" width="680" height="680" alt="" loading="lazy" /></span>
+              <i class="size-check"></i>
+            </span>
             <h3>Celebración</h3>
             <p class="size-dim">24 cm de diámetro</p>
             <p class="size-count"><strong>16</strong> porciones</p>
             <p class="size-desc">La misma receta, un piso más alta. Para que sobre conversación y no torta.</p>
             <p class="price"><span class="cur">$</span>56.800 <span class="cur">ARS</span></p>
-            <button class="button button-primary" type="button" data-pick="1">Elegir la Celebración</button>
+            <label class="size-pick" for="tam-celebracion">
+              <span class="pick-off">Elegir la Celebración</span>
+              <span class="pick-on">Elegida</span>
+            </label>
           </article>
         </div>
 
@@ -420,29 +432,30 @@
         <form class="order-form" data-order-form data-reveal>
           <div class="form-head">
             <h3>Pedido rápido</h3>
-            <p>Preparamos el mensaje y lo abrimos en WhatsApp para que sólo tengas que enviarlo.</p>
+            <p>Armamos el mensaje y lo abrimos en WhatsApp. Vos sólo lo enviás.</p>
           </div>
+
+          <p class="form-pick">
+            <span>Tu torta</span>
+            <strong data-order-summary>Clásica · 20 cm · 10 porciones</strong>
+            <button class="form-change" type="button" data-change-size>Cambiar</button>
+          </p>
+
           <div class="form-fields">
-            <label>
-              <span>¿Cuál querés?</span>
-              <select name="torta" required>
-                <option value="Carrot Cake Clásica — 20 cm / 10 porciones">Clásica · 20 cm · 10 porciones</option>
-                <option value="Carrot Cake Celebración — 24 cm / 16 porciones">Celebración · 24 cm · 16 porciones</option>
-              </select>
-            </label>
-            <label>
+            <label class="field">
               <span>¿Para cuándo?</span>
               <input name="fecha" type="date" required />
             </label>
-            <label>
+            <label class="field">
               <span>Tu nombre</span>
               <input name="nombre" type="text" autocomplete="name" placeholder="¿Cómo te llamás?" required />
             </label>
-            <label>
+            <label class="field field-wide">
               <span>Un detalle (opcional)</span>
               <input name="detalle" type="text" placeholder="Ej.: la retiro el sábado a la tarde" />
             </label>
           </div>
+
           <div class="form-action">
             <p>Respondemos de miércoles a sábado, de 10 a 18 h.</p>
             <button class="button button-primary" type="submit">Pedir por WhatsApp</button>

@@ -361,12 +361,37 @@
       });
     }
 
-    document.querySelectorAll("[data-pick]").forEach((pick) => {
-      pick.addEventListener("click", () => {
-        if (cakeField) cakeField.selectedIndex = Number(pick.dataset.pick);
-        form.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
-        form.querySelector('input[name="fecha"]')?.focus({ preventScroll: true });
+    /* Tamaño: las tarjetas son la fuente de verdad y el formulario las refleja. */
+    const sizeInputs = [...document.querySelectorAll(".size-radio")];
+    const summary = form.querySelector("[data-order-summary]");
+
+    const chosenSize = () => sizeInputs.find((input) => input.checked) || sizeInputs[0];
+
+    const syncSummary = () => {
+      const input = chosenSize();
+      if (!input || !summary) return;
+      const card = input.closest(".size");
+      const name = card?.querySelector("h3")?.textContent.trim() || "";
+      const dim = card?.querySelector(".size-dim")?.textContent.replace(" de diámetro", "").trim() || "";
+      const count = card?.querySelector(".size-count")?.textContent.replace(/\s+/g, " ").trim() || "";
+      summary.textContent = [name, dim, count].filter(Boolean).join(" · ");
+    };
+
+    sizeInputs.forEach((input) => {
+      input.addEventListener("change", syncSummary);
+      // Toda la tarjeta responde al clic, no sólo el botón.
+      input.closest(".size")?.addEventListener("click", (event) => {
+        if (event.target.closest("label")) return; // el label ya lo hace solo
+        input.checked = true;
+        input.dispatchEvent(new Event("change", { bubbles: true }));
       });
+    });
+    syncSummary();
+
+    form.querySelector("[data-change-size]")?.addEventListener("click", () => {
+      const cards = document.querySelector(".sizes");
+      cards?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+      chosenSize()?.focus({ preventScroll: true });
     });
     const dateField = form.querySelector('input[type="date"]');
 
@@ -388,7 +413,7 @@
       const data = new FormData(form);
       const message = [
         "Hola, Carrot Dream. Quiero hacer un pedido:",
-        `Torta: ${data.get("torta")}`,
+        `Torta: ${chosenSize()?.value || "Carrot Cake"}`,
         `Fecha: ${readableDate(data.get("fecha"))}`,
         `Nombre: ${data.get("nombre")}`,
         data.get("detalle") ? `Detalle: ${data.get("detalle")}` : "",
