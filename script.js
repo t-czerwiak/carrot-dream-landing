@@ -152,7 +152,7 @@
     quoteWords.forEach((word, i) => {
       // La última palabra tiene que llegar a 1 antes de que termine el rango.
       const start = (i / quoteWords.length) * 0.66;
-      word.style.setProperty("--w", (0.26 + 0.74 * ramp(progress, start, start + 0.3)).toFixed(3));
+      word.style.setProperty("--w", (0.6 + 0.4 * ramp(progress, start, start + 0.3)).toFixed(3));
     });
   };
 

@@ -117,6 +117,20 @@ Para agregar uno nuevo alcanza con copiar la estructura `.fold` de
 `index.html`; `script.js` engancha cualquier bloque con `data-fold`. Con
 `data-fold-open` arranca abierto. Sin JS quedan todos abiertos.
 
+## Legibilidad
+
+Ningún texto baja de 16px y todos los pares texto/fondo superan el mínimo de
+contraste de WCAG AA (4.5:1, o 3:1 en tipografía grande). No es a ojo: se mide.
+
+```bash
+node tools/audit-text.mjs   # requiere el sitio servido en localhost:54931
+```
+
+Dos avisos son falsos positivos conocidos: los enlaces del header, porque el
+fondo lo pinta un pseudo-elemento que el script no sabe seguir. Medidos sobre
+píxeles reales dan 16:1 en las tres posiciones (sobre el hero, sobre crema y
+sobre verde).
+
 ## Elegir el tamaño
 
 Las dos tarjetas de tamaño son un grupo de radios: se elige ahí y el formulario
