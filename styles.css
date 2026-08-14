@@ -732,11 +732,13 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
 
 .origin-quote {
   max-width: 21ch;
+  margin-inline: auto;
   font-family: var(--serif);
   font-size: clamp(38px, 5.6vw, 78px);
   font-style: italic;
   line-height: 1.06;
   letter-spacing: -0.03em;
+  text-align: center;
 }
 /* Arriba de 900px entra completa en un renglón: el tamaño lo manda el ancho
    disponible, no un clamp fijo. */
