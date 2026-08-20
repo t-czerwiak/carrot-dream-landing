@@ -21,6 +21,7 @@ assets/photos/          fotos propias, fuera del manual
 assets/img/             imágenes derivadas que usa la landing
 tools/build-assets.py   genera assets/img/ desde el brand kit y las fotos
 tools/check-styles.py   avisa si alguna clase del HTML se quedó sin estilos
+tools/build-figma.py    arma el HTML aplanado para importar a Figma
 ```
 
 ## Imágenes
@@ -165,6 +166,25 @@ para esta maqueta. Antes de publicar hay que reemplazarlos:
 | Número de WhatsApp | constante `WHATSAPP` en `script.js` y el enlace del footer en `index.html` |
 | Precios y tamaños | sección `.sizes` de `index.html` |
 | Instagram, email, dirección y horarios | `footer` de `index.html` |
+
+## Pasar el diseño a Figma
+
+```bash
+python tools/build-figma.py
+```
+
+Genera `outputs/carrot-dream-figma.html`: un archivo único, con el CSS adentro
+y las imágenes en base64, listo para arrastrar al plugin **html.to.design**.
+
+No es la landing tal cual, y no puede serlo: importada sin tocar, los bloques
+con revelado entran en opacidad 0, las tres etapas del recorrido caen una
+encima de la otra y los desplegables llegan cerrados. El script deja todo en su
+estado final visible, saca las animaciones, apoya el header en el flujo (con su
+fondo oscuro, que en la web se lo da el hero) y esconde el acompañante, que es
+un elemento flotante y no parte de la maqueta.
+
+Importalo con el ancho del plugin en **1440px**, que es la medida para la que
+está pensada la composición.
 
 ## Deploy
 
