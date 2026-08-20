@@ -15,9 +15,14 @@ Requiere Pillow (convierte los WebP a PNG, que Figma trata mejor).
 import base64
 import io
 import re
+import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 from PIL import Image
+
+import figma_sheet
 
 ROOT = Path(__file__).resolve().parent.parent
 SALIDA = ROOT / "outputs" / "carrot-dream-figma.html"
@@ -144,6 +149,53 @@ def data_uri(ruta: Path) -> str:
     return f"data:{mime};base64,{base64.b64encode(buffer.getvalue()).decode('ascii')}"
 
 
+
+
+# Cada estado del acompañante, con el aro de progreso en el punto que le toca.
+MOMENTOS = (
+    ("carrot", "Hero", 0.12),
+    ("grated", "La receta", 0.38),
+    ("cake", "Textura y origen", 0.72),
+    ("box", "Pedido", 1.0),
+)
+
+
+def hoja_de_estados(html: str) -> str:
+    """Arma la sección final con los componentes en todos sus estados."""
+    chips = []
+    for estado, titulo, avance in MOMENTOS:
+        patron = r'<svg class="companion-art[^"]*" data-state="' + estado + r'".*?</svg>'
+        svg = re.search(patron, html, re.S).group(0)
+        aro = (
+            '<svg class="companion-ring" viewBox="0 0 100 100" style="transform: rotate(-90deg)">'
+            '<circle class="ring-bg" cx="50" cy="50" r="46"></circle>'
+            '<circle class="ring-fg" cx="50" cy="50" r="46" style="stroke-dashoffset: '
+            + str(round(289 - 289 * avance))
+            + '"></circle></svg>'
+        )
+        chips.append(
+            '<div class="fx-item"><div class="fx-chip">'
+            + aro
+            + svg
+            + "</div><em>"
+            + titulo
+            + "</em></div>"
+        )
+
+    cupon = re.search(
+        r'<div class="coupon" data-coupon data-reveal>(.*?)\n\s*</div>\n\s*<!--', html, re.S
+    )
+    if cupon is None:
+        cupon = re.search(r'<div class="coupon" data-coupon data-reveal>(.*?)</div>\s*$', html, re.S)
+    interior = cupon.group(1) if cupon else ""
+
+    return (
+        figma_sheet.HTML.replace("__CHIPS__", "".join(chips))
+        .replace("__COUPON_A__", interior)
+        .replace("__COUPON_B__", interior.replace(">Usar el cupón<", ">Cupón aplicado<"))
+    )
+
+
 def main() -> None:
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     css = (ROOT / "styles.css").read_text(encoding="utf-8")
@@ -156,20 +208,22 @@ def main() -> None:
     html = re.sub(r'\n? *<script src="script\.js[^"]*"></script>', "", html)
     html = re.sub(r"\n? *<noscript>.*?</noscript>", "", html, flags=re.S)
 
+    # La hoja de estados se arma antes de incrustar las imágenes, para que las
+    # rutas de los SVG del acompañante sigan siendo las originales.
+    hoja = hoja_de_estados(html)
+    html = html.replace("</main>", "</main>\n" + hoja)
+
     # CSS adentro del archivo.
-    html = re.sub(
-        r'<link rel="stylesheet" href="styles\.css[^"]*" />',
-        "<style>\n" + css + "\n" + APLANADO + "\n</style>",
-        html,
-    )
+    estilos = "<style>\n" + css + "\n" + APLANADO + "\n" + figma_sheet.CSS + "\n</style>"
+    html = re.sub(r'<link rel="stylesheet" href="styles\.css[^"]*" />', estilos, html)
     # Las tipografías siguen viniendo de Google Fonts: el plugin las resuelve.
 
     # Imágenes incrustadas.
     incrustadas = 0
-    for referencia in sorted(set(re.findall(r'assets/img/[\w.-]+', html))):
+    for referencia in sorted(set(re.findall(r"assets/img/[\w.-]+", html))):
         archivo = ROOT / referencia
         if not archivo.exists():
-            print(f"  falta {referencia}")
+            print("  falta " + referencia)
             continue
         html = html.replace(referencia, data_uri(archivo))
         incrustadas += 1
@@ -181,9 +235,9 @@ def main() -> None:
 
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(html, encoding="utf-8")
-    print(f"{SALIDA.relative_to(ROOT)}")
-    print(f"  {incrustadas} imágenes incrustadas · {SALIDA.stat().st_size // 1024} KB")
-    print(f"  quedan rutas relativas: {len(re.findall(r'assets/', html))}")
+    print(SALIDA.relative_to(ROOT))
+    print("  " + str(incrustadas) + " imágenes incrustadas · " + str(SALIDA.stat().st_size // 1024) + " KB")
+    print("  rutas relativas que quedan: " + str(len(re.findall(r"assets/", html))))
 
 
 if __name__ == "__main__":

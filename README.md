@@ -22,6 +22,7 @@ assets/img/             imágenes derivadas que usa la landing
 tools/build-assets.py   genera assets/img/ desde el brand kit y las fotos
 tools/check-styles.py   avisa si alguna clase del HTML se quedó sin estilos
 tools/build-figma.py    arma el HTML aplanado para importar a Figma
+tools/figma_sheet.py    la hoja de componentes y estados que se le agrega
 ```
 
 ## Imágenes
@@ -182,6 +183,12 @@ encima de la otra y los desplegables llegan cerrados. El script deja todo en su
 estado final visible, saca las animaciones, apoya el header en el flujo (con su
 fondo oscuro, que en la web se lo da el hero) y esconde el acompañante, que es
 un elemento flotante y no parte de la maqueta.
+
+Al final del archivo se agrega una **hoja de componentes y estados**: cada botón
+en normal y hover, el acompañante en sus cuatro momentos, el desplegable abierto
+y cerrado, el cupón antes y después de canjearlo, los campos del formulario, la
+paleta con sus hex y la escala tipográfica. Son estados que en la web dependen
+de la interacción y que en una maqueta estática, si no, no existen.
 
 Importalo con el ancho del plugin en **1440px**, que es la medida para la que
 está pensada la composición.
