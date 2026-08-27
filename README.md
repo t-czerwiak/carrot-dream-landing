@@ -23,6 +23,7 @@ tools/build-assets.py   genera assets/img/ desde el brand kit y las fotos
 tools/check-styles.py   avisa si alguna clase del HTML se quedó sin estilos
 tools/build-figma.py    arma el HTML aplanado para importar a Figma
 tools/figma_sheet.py    la hoja de componentes y estados que se le agrega
+tools/figma_phases.py   las tres pantallas del recorrido para la maqueta
 ```
 
 ## Imágenes
@@ -183,6 +184,12 @@ encima de la otra y los desplegables llegan cerrados. El script deja todo en su
 estado final visible, saca las animaciones, apoya el header en el flujo (con su
 fondo oscuro, que en la web se lo da el hero) y esconde el acompañante, que es
 un elemento flotante y no parte de la maqueta.
+
+El recorrido no se aplana: se convierte en **tres pantallas de 1440x900**, una
+por fase, con la escena real completa (el plato, los aros, el riel y la
+zanahoria en órbita). Las posiciones de la zanahoria no están dibujadas a mano:
+se miden sobre la página en vivo y quedan guardadas en `tools/figma_phases.json`.
+Si se cambia la animación, se vuelven a medir con `capture-phases.mjs`.
 
 Al final del archivo se agrega una **hoja de componentes y estados**: cada botón
 en normal y hover, el acompañante en sus cuatro momentos, el desplegable abierto

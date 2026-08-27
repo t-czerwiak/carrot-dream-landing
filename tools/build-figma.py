@@ -22,6 +22,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from PIL import Image
 
+import figma_phases
 import figma_sheet
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -210,11 +211,17 @@ def main() -> None:
 
     # La hoja de estados se arma antes de incrustar las imágenes, para que las
     # rutas de los SVG del acompañante sigan siendo las originales.
+    # El recorrido, en vez de aplanarse en tres círculos, pasa a ser tres
+    # pantallas completas con la escena real y la zanahoria en su lugar.
+    escena = re.search(r'<div class="journey-scene">.*?\n        </div>', html, re.S).group(0)
+    seccion = re.search(r' *<!-- ── Recorrido.*?\n      </section>\n', html, re.S).group(0)
+    html = html.replace(seccion, figma_phases.fases(escena) + "\n")
+
     hoja = hoja_de_estados(html)
     html = html.replace("</main>", "</main>\n" + hoja)
 
     # CSS adentro del archivo.
-    estilos = "<style>\n" + css + "\n" + APLANADO + "\n" + figma_sheet.CSS + "\n</style>"
+    estilos = "<style>\n" + css + "\n" + APLANADO + "\n" + figma_sheet.CSS + "\n" + figma_phases.CSS + "\n</style>"
     html = re.sub(r'<link rel="stylesheet" href="styles\.css[^"]*" />', estilos, html)
     # Las tipografías siguen viniendo de Google Fonts: el plugin las resuelve.
 
