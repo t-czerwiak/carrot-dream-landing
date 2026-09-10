@@ -12,7 +12,7 @@ const ev=async(x)=>{const r=await send("Runtime.evaluate",{expression:x,awaitPro
 await send("Page.enable"); await send("Runtime.enable");
 await send("Emulation.setEmulatedMedia",{features:[{name:"prefers-reduced-motion",value:"no-preference"}]});
 await send("Emulation.setDeviceMetricsOverride",{width:1440,height:900,deviceScaleFactor:1,mobile:false});
-await send("Page.navigate",{url:"http://localhost:54931/index.html"});
+await send("Page.navigate",{url:"http://127.0.0.1:54931/index.html"});
 while(!events.find(e=>e.method==="Page.loadEventFired")) await sleep(60);
 await sleep(1500);
 // Todo visible de una: sin depender de que el scroll dispare los revelados.

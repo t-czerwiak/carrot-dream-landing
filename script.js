@@ -63,6 +63,19 @@
     arts.forEach((art) => art.classList.toggle("is-on", art.dataset.state === state));
   };
 
+  /* ¿La cinta le queda detrás al chip? Se comparan las dos cajas en vez de
+     preguntar qué hay en un punto: alcanza con que se toquen por un borde para
+     que el chip le pise un renglón, y un punto suelto no lo ve. */
+  const marquesinas = Array.from(document.querySelectorAll(".marquee"));
+  const sobreMarquesina = () => {
+    if (!companion || !marquesinas.length) return false;
+    const caja = companion.getBoundingClientRect();
+    return marquesinas.some((cinta) => {
+      const c = cinta.getBoundingClientRect();
+      return c.bottom > caja.top - 8 && c.top < caja.bottom + 8;
+    });
+  };
+
   /* Gana la sección que ocupa el centro de la pantalla. */
   const currentZone = () => {
     const middle = window.innerHeight / 2;
@@ -94,20 +107,55 @@
   /* Radios del recorrido, medidos sobre la escena real: la zanahoria pasa
      por afuera del plato sin llegar nunca al título ni al texto. */
   const measureJourney = () => {
-    if (!stage || !plates || !carrot) return null;
+    const disco = journey?.querySelector(".plate");
+    if (!stage || !disco || !carrot) return null;
     const scene = stage.getBoundingClientRect();
-    const disc = plates.getBoundingClientRect();
+    const disc = disco.getBoundingClientRect();
     if (!scene.height || !disc.width) return null;
 
     const half = disc.width / 2;
-    const carrotHalf = (carrot.getBoundingClientRect().height || 60) / 2;
-    const roomAbove = disc.top - scene.top;
+    const cy = disc.top + half - scene.top;
+
+    // Los aros y las migas se cuelgan del centro del plato, no de una cuenta
+    // fija: así la escena se arma igual de bien a cualquier altura de ventana.
+    stage.style.setProperty("--plate-cy", cy.toFixed(1) + "px");
+
+    // Tamaño real de la zanahoria: su rect está inflado por la rotación, así
+    // que se saca del ancho usado y de la proporción del viewBox. Como da una
+    // vuelta entera, lo que tiene que caber es su media diagonal.
+    const vista = (carrot.getAttribute("viewBox") || "0 0 150 224").split(/\s+/).map(Number);
+    const ancho = parseFloat(getComputedStyle(carrot).width) || 60;
+    const alto = ancho * (vista[3] / vista[2] || 1.5);
+    const radio = Math.hypot(ancho, alto) / 2;
+
+    // El aire disponible por arriba es el que hay entre el título y el plato,
+    // no el alto entero del stage: desde el refactor el stage arranca en el
+    // plato mismo, y midiéndolo contra él la órbita se cerraba hasta pasar por
+    // adentro del plato.
+    const cabezal = journey.querySelector(".journey-head");
+    const techo = cabezal ? cabezal.getBoundingClientRect().bottom : scene.top;
+
+    // Los aros se cuelgan del mismo aire: nunca más anchos que el doble de lo
+    // que hay entre el título y el plato, o le pasan por encima.
+    stage.style.setProperty(
+      "--ring-max",
+      (disc.width + 2 * Math.max(0, disc.top - techo - 4)).toFixed(0) + "px",
+    );
+
+    // Dos límites por eje: el radio que la zanahoria necesita para no rozar el
+    // plato, y el que la escena le permite sin pisar el título ni salirse por
+    // el costado. Manda el segundo, y en ese caso roza — pero pasa por delante
+    // del plato, así que se lee como que orbita y no como un recorte.
+    const centroX = disc.left + half;
+    const quiere = half + radio + 6;
+    const cabeX = Math.min(centroX, window.innerWidth - centroX) - radio - 6;
+    const cabeY = half + (disc.top - techo) - radio - 6;
 
     return {
       cx: disc.left + half - scene.left,
-      cy: disc.top + half - scene.top,
-      rx: half + clamp(scene.width * 0.055, 46, 118),
-      ry: half + clamp(roomAbove - carrotHalf - 12, 18, 92),
+      cy,
+      rx: clamp(Math.min(Math.max(quiere, half + scene.width * 0.055), cabeX), half * 0.6, half + 130),
+      ry: clamp(Math.min(quiere, cabeY), half * 0.6, half + 130),
     };
   };
 
@@ -131,6 +179,8 @@
     // torta terminada.
     const angle = (-104 + progress * 274) * (Math.PI / 180);
     const sink = 1 - 0.78 * clamp((progress - 0.82) / 0.18, 0, 1);
+    // Orbita por delante del plato y sólo se mete detrás para el hundido final.
+    journey.style.setProperty("--orbit-z", progress > 0.82 ? "1" : "3");
     const style = carrot.style;
     style.setProperty("--x", `${(path.cx + Math.sin(angle) * path.rx * sink).toFixed(1)}px`);
     style.setProperty("--y", `${(path.cy - Math.cos(angle) * path.ry * sink).toFixed(1)}px`);
@@ -246,6 +296,9 @@
       if (companion) {
         const reached = pageProgress();
         setCompanionState(currentZone());
+        // La marquesina es una cinta a sangre completa: el chip le tapaba el
+        // texto. Se aparta mientras la tenga detrás.
+        companion.classList.toggle("is-over-marquee", sobreMarquesina());
         companion.style.setProperty("--page", reached.toFixed(4));
         // Se inclina y se estira apenas con la velocidad del scroll.
         const speed = Math.abs(velocity);

@@ -24,6 +24,8 @@ tools/check-styles.py   avisa si alguna clase del HTML se quedó sin estilos
 tools/build-figma.py    arma el HTML aplanado para importar a Figma
 tools/figma_sheet.py    la hoja de componentes y estados que se le agrega
 tools/figma_phases.py   las tres pantallas del recorrido para la maqueta
+tools/capture-phases.mjs mide esas tres fases sobre la página en vivo
+tools/sync-output.py    copia el sitio a outputs/carrot-dream-landing/
 ```
 
 ## Imágenes
@@ -93,11 +95,29 @@ scroll, y la foto del hero y la de textura se desplazan despacio dentro de su
 marco.
 
 **El recorrido.** La sección "De la raíz a tu mesa" ocupa 190vh con una escena
-sticky de 100dvh.
-Cruza los tres momentos (zanahoria, masa, torta terminada) y mueve la zanahoria
-ilustrada sobre un recorrido elíptico medido en tiempo real contra la escena,
-así nunca pisa el título ni el texto. Todo se anima con `transform` y
-`opacity`.
+sticky de 100dvh. Cruza los tres momentos (zanahoria, masa, torta terminada) y
+mueve la zanahoria ilustrada sobre un recorrido elíptico. Todo se anima con
+`transform` y `opacity`.
+
+Nada de esa escena está posicionado a mano, y por una razón: cuando cada pieza
+tenía su lugar fijo, andaba bien en la pantalla donde se la había ajustado y se
+rompía en el resto. El plato, su texto y el riel se apilan y se centran como un
+solo bloque, y `script.js` mide la escena en cada resize para derivar tres cosas:
+
+- `--plate-cy`, el centro real del plato, del que cuelgan los aros y las migas;
+- `--ring-max`, el diámetro máximo que pueden tener los aros sin meterse debajo
+  del título;
+- los radios de la órbita, que salen del tamaño real de la zanahoria (su media
+  diagonal, porque da una vuelta entera) y del aire que hay entre el título y el
+  plato.
+
+La zanahoria pasa **por delante** del plato durante todo el recorrido y sólo se
+va atrás para el hundido final. Al revés se veía cortada por el borde del plato
+y parecía un error de dibujo.
+
+Se verifica midiendo, no a ojo: hay una sonda que recorre trece tamaños de
+ventana por tres momentos cada uno y avisa si alguna pieza pisa a otra, se sale
+del marco o deja un hueco muerto.
 
 **Movimiento reducido.** Con `prefers-reduced-motion: reduce` la sección se
 convierte en una composición estática con los tres momentos visibles y legibles,
@@ -126,7 +146,7 @@ Ningún texto baja de 16px y todos los pares texto/fondo superan el mínimo de
 contraste de WCAG AA (4.5:1, o 3:1 en tipografía grande). No es a ojo: se mide.
 
 ```bash
-node tools/audit-text.mjs   # requiere el sitio servido en localhost:54931
+node tools/audit-text.mjs   # requiere el sitio servido en 127.0.0.1:54931
 ```
 
 Dos avisos son falsos positivos conocidos: los enlaces del header, porque el
@@ -188,8 +208,14 @@ un elemento flotante y no parte de la maqueta.
 El recorrido no se aplana: se convierte en **tres pantallas de 1440x900**, una
 por fase, con la escena real completa (el plato, los aros, el riel y la
 zanahoria en órbita). Las posiciones de la zanahoria no están dibujadas a mano:
-se miden sobre la página en vivo y quedan guardadas en `tools/figma_phases.json`.
-Si se cambia la animación, se vuelven a medir con `capture-phases.mjs`.
+se miden sobre la página en vivo y quedan guardadas en `tools/figma_phases.json`,
+junto con el armado de la escena (tamaño del plato, aire de la órbita, diámetro
+de los aros). Si se toca la animación o el layout del recorrido, hay que volver
+a medirlas, con el sitio servido y Chrome escuchando en el puerto 9222:
+
+```bash
+node tools/capture-phases.mjs
+```
 
 Al final del archivo se agrega una **hoja de componentes y estados**: cada botón
 en normal y hover, el acompañante en sus cuatro momentos, el desplegable abierto

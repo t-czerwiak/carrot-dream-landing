@@ -14,3 +14,7 @@ Desktop.ini
 # Firebase
 .firebase/
 *.log
+
+# Cachés de Python
+__pycache__/
+*.pyc
