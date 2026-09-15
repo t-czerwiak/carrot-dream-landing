@@ -53,6 +53,33 @@ CSS = """
   opacity: 0.72;
 }
 
+/* La barra de secciones. En la web va fija al costado y en la maqueta se
+   esconde con el resto de los flotantes, así que sus estados se muestran acá.
+   Las marcas se dibujan a mano porque en el sitio las arma el JavaScript. */
+.fx-rail { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+.fx-rail i {
+  display: block;
+  width: 14px;
+  height: var(--glyph);
+  border-radius: 1px;
+  background: rgba(26, 16, 8, 0.38);
+}
+.fx-rail i.fx-hover { width: 24px; background: var(--cinnamon); }
+.fx-rail i.fx-on { width: 30px; background: var(--ember); }
+.fx-row-dark .fx-rail i { background: rgba(255, 244, 230, 0.6); }
+.fx-row-dark .fx-rail i.fx-hover { width: 24px; background: var(--cream); }
+.fx-row-dark .fx-rail i.fx-on { width: 30px; background: var(--orange); }
+.fx-tip {
+  padding: 4px 10px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--cream);
+  background: var(--ink);
+  border-radius: 3px;
+}
+.fx-row-dark .fx-tip { color: var(--ink); background: var(--cream); }
+
 /* Estados de hover congelados, para que existan en la maqueta. */
 .button-primary.fx-hover { background: #ffa246; border-color: #ffa246; }
 .button-ghost.fx-hover { color: var(--ink); background: var(--orange); border-color: var(--orange); }
@@ -130,6 +157,26 @@ HTML = """
       <div class="fx-group">
         <h3>Acompañante · los cuatro estados</h3>
         <div class="fx-row fx-row-dark">__CHIPS__</div>
+      </div>
+
+      <div class="fx-group">
+        <h3>Barra de secciones</h3>
+        <div class="fx-row">
+          <div class="fx-item">
+            <span class="fx-rail"><i></i><i class="fx-on"></i><i></i><i></i></span>
+            <em>Sobre fondo claro</em>
+          </div>
+          <div class="fx-item"><span class="fx-rail"><i class="fx-hover"></i></span><em>Hover</em></div>
+          <div class="fx-item"><span class="fx-tip">El origen</span><em>Etiqueta al pasar por encima</em></div>
+        </div>
+        <div class="fx-row fx-row-dark" style="margin-top: 14px">
+          <div class="fx-item">
+            <span class="fx-rail"><i></i><i class="fx-on"></i><i></i><i></i></span>
+            <em>Sobre fondo oscuro</em>
+          </div>
+          <div class="fx-item"><span class="fx-rail"><i class="fx-hover"></i></span><em>Hover</em></div>
+          <div class="fx-item"><span class="fx-tip">El origen</span><em>Etiqueta al pasar por encima</em></div>
+        </div>
       </div>
 
       <div class="fx-group">
