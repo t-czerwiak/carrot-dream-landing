@@ -1211,6 +1211,11 @@ h1 i, h2 i, h3 i { font-style: italic; color: var(--ember); }
 }
 
 .fold-arrow {
+  /* La flecha se dibuja con `currentColor`, y como es un `<i>` dentro del `h3`
+     del título caía en la regla de las itálicas de titular, que la pintaba
+     naranja: sobre el verde del origen daba 1.22 de contraste, invisible. Toma
+     el color de texto de su bloque, igual que el aro que la rodea. */
+  color: inherit;
   position: relative;
   flex: none;
   width: 38px;
