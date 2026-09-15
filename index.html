@@ -19,7 +19,7 @@
       rel="stylesheet"
     />
     <link rel="preload" as="image" href="assets/img/cake-hero.jpg" />
-    <link rel="stylesheet" href="styles.css?v=3" />
+    <link rel="stylesheet" href="styles.css?v=4" />
     <noscript>
       <style>
         /* Sin JS no hay quien dispare el revelado: se muestra todo. */
@@ -35,6 +35,8 @@
 
     <!-- Acompañante: cambia de estado según la sección y su aro se completa al
          llegar al pedido, donde le pasa la posta al cupón. -->
+    <nav class="rail" data-rail aria-label="Secciones de la página"></nav>
+
     <div class="companion" data-companion aria-hidden="true">
       <svg class="companion-ring" viewBox="0 0 100 100" aria-hidden="true">
         <circle class="ring-bg" cx="50" cy="50" r="46" />
@@ -94,7 +96,8 @@
 
     <main id="contenido">
       <!-- ── Hero ─────────────────────────────────────────────── -->
-      <section class="hero" id="inicio" data-companion-state="carrot" aria-labelledby="hero-title">
+      <section class="hero screen" id="inicio" data-companion-state="carrot" data-screen="Inicio" data-tone="dark"
+        aria-labelledby="hero-title">
         <div class="hero-inner">
           <div class="hero-copy" data-reveal>
             <p class="kicker">Repostería artesanal · Buenos Aires</p>
@@ -125,6 +128,9 @@
 
       </section>
 
+      <!-- La marquesina abre la pantalla de la receta, no cierra la del hero: la
+           primera pantalla tiene que ser toda marrón. -->
+      <div class="screen screen-recipe" id="receta" data-screen="La receta">
       <div class="marquee" data-marquee aria-hidden="true">
         <div class="marquee-track">
           <span>Dulzura en cada bocado</span><b></b><span>Carrot Cake artesanal</span><b></b><span>Hecha desde la raíz</span><b></b>
@@ -133,7 +139,7 @@
       </div>
 
       <!-- ── La receta ────────────────────────────────────────── -->
-      <section class="recipe" id="receta" data-companion-state="grated" aria-labelledby="recipe-title">
+      <section class="recipe" data-companion-state="grated" aria-labelledby="recipe-title">
         <div class="recipe-head" data-reveal>
           <p class="kicker kicker-dark">La receta</p>
           <h2 id="recipe-title">Todo lo que queremos<br />en <i>una torta.</i></h2>
@@ -166,9 +172,11 @@
           </li>
         </ul>
       </section>
+      </div>
 
       <!-- ── Recorrido con scroll ─────────────────────────────── -->
-      <section class="journey" id="recorrido" data-companion-state="none" data-journey aria-labelledby="journey-title">
+      <section class="journey" id="recorrido" data-companion-state="none" data-journey
+        data-screen="El recorrido" data-tone="dark" aria-labelledby="journey-title">
         <div class="journey-scene">
           <div class="journey-head">
             <p class="kicker">El recorrido</p>
@@ -237,7 +245,9 @@
       </section>
 
       <!-- ── Textura / video ──────────────────────────────────── -->
-      <section class="texture" data-companion-state="cake" aria-labelledby="texture-title">
+      <section class="texture screen" data-companion-state="cake" data-screen="La textura"
+        aria-labelledby="texture-title">
+        <div class="texture-grid">
         <div class="texture-copy" data-reveal>
           <p class="kicker kicker-dark">La textura</p>
           <h2 id="texture-title">Suave por dentro.<br /><i>Inolvidable</i> afuera.</h2>
@@ -252,10 +262,12 @@
         <figure class="frame frame-wide" data-video-src="" data-poster="assets/img/cake-slice.jpg" data-reveal>
           <img data-parallax src="assets/img/cake-slice.jpg" width="1026" height="684" alt="Porción de Carrot Cake cortada, con tres capas de miga y frosting de queso crema" loading="lazy" />
         </figure>
+        </div>
       </section>
 
       <!-- ── Origen ───────────────────────────────────────────── -->
-      <section class="origin" id="origen" data-companion-state="cake" aria-labelledby="origin-title">
+      <section class="origin screen" id="origen" data-companion-state="cake" data-screen="El origen" data-tone="dark"
+        aria-labelledby="origin-title">
         <div class="origin-head" data-reveal>
           <p class="kicker kicker-light">El origen</p>
           <h2 id="origin-title">Todo empezó con una restricción<br />y mucha <i>curiosidad.</i></h2>
@@ -299,6 +311,8 @@
 
       <!-- ── Pedido ───────────────────────────────────────────── -->
       <section class="order" id="pedido" data-companion-state="box" aria-labelledby="order-title">
+        <div class="screen" data-screen="Pedidos">
+        <div class="order-shell">
         <div class="order-head" data-reveal>
           <p class="kicker kicker-dark">Pedidos</p>
           <h2 id="order-title">Tu próximo<br /><i>momento dulce.</i></h2>
@@ -322,46 +336,6 @@
             <p class="coupon-note">Código <b data-coupon-code>CARROT10</b> · lo sumamos al mensaje de WhatsApp.</p>
           </div>
           <button class="button button-primary" type="button" data-coupon-use>Usar el cupón</button>
-        </div>
-
-        <!-- Cada tarjeta es un radio: se elige acá y el formulario lo toma.
-             Los discos van a escala real entre sí (20 y 24 cm). -->
-        <div class="sizes" role="radiogroup" aria-label="Tamaño de la torta" data-reveal>
-          <article class="size">
-            <input class="size-radio" type="radio" name="tamano" id="tam-clasica"
-                   value="Carrot Cake Clásica — 20 cm / 10 porciones" checked />
-            <span class="size-photo" aria-hidden="true">
-              <span style="--d: 132px"><img src="assets/img/cake-nuts.jpg" width="680" height="680" alt="" loading="lazy" /></span>
-              <i class="size-check"></i>
-            </span>
-            <h3>Clásica</h3>
-            <p class="size-dim">20 cm de diámetro</p>
-            <p class="size-count"><strong>10</strong> porciones</p>
-            <p class="size-desc">Para una mesa de seis a diez. El tamaño de un plato de postre grande.</p>
-            <p class="price"><span class="cur">$</span>38.400 <span class="cur">ARS</span></p>
-            <label class="size-pick" for="tam-clasica">
-              <span class="pick-off">Elegir la Clásica</span>
-              <span class="pick-on">Elegida</span>
-            </label>
-          </article>
-
-          <article class="size">
-            <input class="size-radio" type="radio" name="tamano" id="tam-celebracion"
-                   value="Carrot Cake Celebración — 24 cm / 16 porciones" />
-            <span class="size-photo" aria-hidden="true">
-              <span style="--d: 158px"><img src="assets/img/cake-crumb.jpg" width="680" height="680" alt="" loading="lazy" /></span>
-              <i class="size-check"></i>
-            </span>
-            <h3>Celebración</h3>
-            <p class="size-dim">24 cm de diámetro</p>
-            <p class="size-count"><strong>16</strong> porciones</p>
-            <p class="size-desc">La misma receta, un piso más alta. Para que sobre conversación y no torta.</p>
-            <p class="price"><span class="cur">$</span>56.800 <span class="cur">ARS</span></p>
-            <label class="size-pick" for="tam-celebracion">
-              <span class="pick-off">Elegir la Celebración</span>
-              <span class="pick-on">Elegida</span>
-            </label>
-          </article>
         </div>
 
         <div class="how" data-reveal>
@@ -419,6 +393,61 @@
         </div>
         </div>
 
+
+        </div>
+        </div>
+
+        <!-- Cada tarjeta es un radio: se elige acá y el formulario lo toma.
+             Los discos van a escala real entre sí (20 y 24 cm). -->
+        <div class="screen" data-screen="Tamaños">
+        <div class="order-shell">
+        <div class="sizes-head" data-reveal>
+          <p class="kicker kicker-dark">El tamaño</p>
+          <h3 id="sizes-title">La misma receta,<br /><i>en dos medidas.</i></h3>
+        </div>
+        <div class="sizes" role="radiogroup" aria-labelledby="sizes-title" data-reveal>
+          <article class="size">
+            <input class="size-radio" type="radio" name="tamano" id="tam-clasica"
+                   value="Carrot Cake Clásica — 20 cm / 10 porciones" checked />
+            <span class="size-photo" aria-hidden="true">
+              <span style="--d: 0.75"><img src="assets/img/cake-nuts.jpg" width="680" height="680" alt="" loading="lazy" /></span>
+              <i class="size-check"></i>
+            </span>
+            <h3>Clásica</h3>
+            <p class="size-dim">20 cm de diámetro</p>
+            <p class="size-count"><strong>10</strong> porciones</p>
+            <p class="size-desc">Para una mesa de seis a diez. El tamaño de un plato de postre grande.</p>
+            <p class="price"><span class="cur">$</span>38.400 <span class="cur">ARS</span></p>
+            <label class="size-pick" for="tam-clasica">
+              <span class="pick-off">Elegir la Clásica</span>
+              <span class="pick-on">Elegida</span>
+            </label>
+          </article>
+
+          <article class="size">
+            <input class="size-radio" type="radio" name="tamano" id="tam-celebracion"
+                   value="Carrot Cake Celebración — 24 cm / 16 porciones" />
+            <span class="size-photo" aria-hidden="true">
+              <span style="--d: 0.9"><img src="assets/img/cake-crumb.jpg" width="680" height="680" alt="" loading="lazy" /></span>
+              <i class="size-check"></i>
+            </span>
+            <h3>Celebración</h3>
+            <p class="size-dim">24 cm de diámetro</p>
+            <p class="size-count"><strong>16</strong> porciones</p>
+            <p class="size-desc">La misma receta, un piso más alta. Para que sobre conversación y no torta.</p>
+            <p class="price"><span class="cur">$</span>56.800 <span class="cur">ARS</span></p>
+            <label class="size-pick" for="tam-celebracion">
+              <span class="pick-off">Elegir la Celebración</span>
+              <span class="pick-on">Elegida</span>
+            </label>
+          </article>
+        </div>
+
+        </div>
+        </div>
+
+        <div class="screen" data-screen="Reservar">
+        <div class="order-shell">
         <form class="order-form" data-order-form data-reveal>
           <div class="form-head">
             <h3>Pedido rápido</h3>
@@ -452,10 +481,12 @@
           </div>
           <p class="form-status" role="status" aria-live="polite"></p>
         </form>
+        </div>
+        </div>
       </section>
     </main>
 
-    <footer class="site-footer" data-companion-state="box">
+    <footer class="site-footer screen" data-companion-state="box" data-screen="Contacto" data-tone="dark">
       <div class="footer-top">
         <div class="footer-brand">
           <img src="assets/img/logo-horizontal.webp" width="760" height="215" alt="Carrot Dream" loading="lazy" />
@@ -482,6 +513,6 @@
       </div>
     </footer>
 
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
   </body>
 </html>

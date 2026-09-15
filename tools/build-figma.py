@@ -52,8 +52,21 @@ APLANADO = """
 }
 .hero { padding-top: clamp(28px, 5vh, 60px) !important; }
 
-/* El acompañante es un elemento flotante de la web, no parte de la maqueta. */
-.companion { display: none !important; }
+/* El acompañante y la barra de secciones son elementos flotantes de la web, no
+   parte de la maqueta. */
+.companion,
+.rail { display: none !important; }
+
+/* Cada bloque ocupa una pantalla. En la web eso es 100dvh; acá va pegado a
+   900px, la misma medida para la que está pensada la composición y con la que
+   se capturaron las tres fases del recorrido: el plugin renderiza a un alto
+   cualquiera y un `dvh` daría pantallas de cualquier tamaño. */
+.screen { min-height: 900px !important; }
+.journey-plates { padding-top: 0 !important; }
+/* Sin frenos de scroll: es un documento plano, y con el snap puesto ir al
+   principio deja la página apoyada en el hero, con el header fuera de cuadro. */
+html { scroll-snap-type: none !important; }
+.screen, .journey { scroll-snap-align: none !important; }
 
 /* El recorrido pasa de escena animada a los tres momentos, uno al lado del
    otro. Es la misma composición que ve quien tiene el movimiento reducido. */

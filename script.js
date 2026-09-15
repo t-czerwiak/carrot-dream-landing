@@ -86,6 +86,48 @@
     return companionState === "none" ? "carrot" : companionState;
   };
 
+  /* --- Barra de secciones -------------------------------------------------- */
+
+  /* Una marca por pantalla, al costado. La lista no está escrita acá: sale de
+     los `data-screen` del HTML, así la etiqueta vive al lado del contenido que
+     nombra y no hay dos listas que mantener sincronizadas. */
+  const rail = document.querySelector("[data-rail]");
+  const pantallas = [...document.querySelectorAll("[data-screen]")];
+  const marcas = [];
+  let marcaActual = -1;
+
+  if (rail) {
+    pantallas.forEach((pantalla) => {
+      const marca = document.createElement("button");
+      marca.type = "button";
+      marca.className = "rail-dot";
+      marca.setAttribute("aria-label", `Ir a ${pantalla.dataset.screen}`);
+      const etiqueta = document.createElement("span");
+      etiqueta.className = "rail-label";
+      etiqueta.textContent = pantalla.dataset.screen;
+      marca.append(etiqueta);
+      marca.addEventListener("click", () => {
+        pantalla.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+      });
+      rail.append(marca);
+      marcas.push(marca);
+    });
+  }
+
+  /* Manda la última pantalla que empezó arriba del medio de la ventana. */
+  const setRail = () => {
+    if (!marcas.length) return;
+    const medio = window.innerHeight / 2;
+    let actual = 0;
+    pantallas.forEach((pantalla, i) => {
+      if (pantalla.getBoundingClientRect().top <= medio) actual = i;
+    });
+    if (actual === marcaActual) return;
+    marcaActual = actual;
+    marcas.forEach((marca, i) => marca.classList.toggle("is-on", i === actual));
+    rail.classList.toggle("is-dark", pantallas[actual].dataset.tone === "dark");
+  };
+
   /* --- Recorrido: "De la raíz a tu mesa" ---------------------------------- */
 
   const journey = document.querySelector("[data-journey]");
@@ -292,6 +334,7 @@
 
     if (moving) {
       if (header) header.classList.toggle("is-stuck", scrollY > 24);
+      setRail();
 
       if (companion) {
         const reached = pageProgress();
@@ -335,6 +378,7 @@
     const syncStatic = () => {
       scrollY = window.scrollY;
       if (header) header.classList.toggle("is-stuck", scrollY > 24);
+      setRail();
       if (!companion) return;
       const reached = pageProgress();
       setCompanionState(currentZone());

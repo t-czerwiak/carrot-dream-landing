@@ -62,6 +62,51 @@ Detalles a tener en cuenta si se regeneran:
 - El logotipo se usa en su versión a color sobre fondo oscuro, como indica el
   manual.
 
+## Una pantalla, un bloque
+
+Cada bloque mide como mínimo una ventana entera (`.screen`, `min-height: 100dvh`)
+y el scroll frena en su comienzo (`scroll-snap-type: y proximity`). El motivo es
+concreto: antes la textura ocupaba 61vh y el origen 75vh, así que siempre se
+veían dos fondos a la vez y cada sección parecía más chica de lo que era.
+
+`proximity` y no `mandatory`: el recorrido mide 190vh porque su animación se
+mueve con el scroll, y con snap obligatorio su interior sería inalcanzable.
+
+Las pantallas son nueve: inicio, receta, recorrido, textura, origen, y el pedido
+partido en tres (la invitación con el cupón y los desplegables, la elección del
+tamaño, y el formulario). El pedido era un solo bloque de casi tres pantallas y
+al entrar desde el origen la elección del tamaño quedaba cortada al medio.
+
+La marquesina abre la pantalla de la receta en vez de cerrar la del hero: la
+primera pantalla tiene que ser toda marrón.
+
+Para que todo eso entre, el ritmo vertical de la receta, de las tarjetas de
+tamaño y del formulario se mide contra el alto de la ventana (`vh`), no sólo
+contra el ancho. En ventanas de menos de 700px de alto se esconden además tres
+bajadas —la de la receta, la del pedido y la descripción de cada tamaño—: es lo
+único que faltaba para que entraran enteras, y es la única parte del sitio donde
+se saca contenido.
+
+Se verifica midiendo: hay una sonda que compara el alto de cada bloque contra la
+ventana en siete medidas de escritorio y avisa si alguno queda por debajo o se
+pasa.
+
+### La barra de secciones
+
+Al costado derecho hay una marca por pantalla: la actual encendida, cada una
+lleva al comienzo de la suya y la etiqueta aparece al pasar por encima. La
+nativa no se puede partir en secciones, así que ésta hace ese trabajo (y la
+nativa queda fina y en los colores de la marca).
+
+La lista no está escrita en el JavaScript: sale de los `data-screen` del HTML,
+así la etiqueta vive al lado del contenido que nombra. Sobre los bloques
+oscuros las marcas se dan vuelta, y eso lo declara cada pantalla con
+`data-tone="dark"`.
+
+Abajo de 900px no aparece, y ahí también se apaga el snap: en un celular una
+sección no entra en una pantalla sin esconder la mitad de lo que dice, así que
+el scroll libre es lo correcto y el acompañante ya es una barra al pie.
+
 ## Animación
 
 Todo lo que depende del scroll se resuelve en un único bucle de
@@ -149,10 +194,11 @@ contraste de WCAG AA (4.5:1, o 3:1 en tipografía grande). No es a ojo: se mide.
 node tools/audit-text.mjs   # requiere el sitio servido en 127.0.0.1:54931
 ```
 
-Dos avisos son falsos positivos conocidos: los enlaces del header, porque el
-fondo lo pinta un pseudo-elemento que el script no sabe seguir. Medidos sobre
+Tres avisos son falsos positivos conocidos. Los dos enlaces del header, porque
+el fondo lo pinta un pseudo-elemento que el script no sabe seguir: medidos sobre
 píxeles reales dan 16:1 en las tres posiciones (sobre el hero, sobre crema y
-sobre verde).
+sobre verde). Y la etiqueta de la barra de secciones, que vive en opacidad 0
+hasta que pasás por encima: visible mide 17:1.
 
 ## Elegir el tamaño
 
